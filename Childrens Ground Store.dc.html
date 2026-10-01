@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Jost:wght@300;400;500;600&family=Figtree:wght@300;400;500;600;700&family=Titan+One&family=Luckiest+Guy&family=Bowlby+One+SC&display=swap" rel="stylesheet" />
+<style>
+  body { margin:0; background:#EDE6DE; font-family:'Poppins',system-ui,sans-serif; color:#17130F; -webkit-font-smoothing:antialiased; }
+  h1, h2, h3 { font-weight:600; letter-spacing:-.015em; }
+  * { box-sizing:border-box; }
+  a { color:#9C3D10; text-decoration:none; }
+  a:hover { color:#17130F; text-decoration:underline; }
+  input, select, button, textarea { font-family:inherit; }
+  @keyframes cg-marquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+</style>
+</helmet>
+
+<div style="background:#FBF6F1;min-height:100vh;padding-bottom:64px">
+
+  <sc-if value="{{ topBannerOpen }}" hint-placeholder-val="{{ true }}">
+  <div style="position:relative;background:#17130F;color:#FBF6F1;padding:4px 48px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;line-height:1.2">
+    <img src="assets/cg-mark.svg" alt="Children's Ground Store" style="width:18px;height:auto;display:block;flex:none" />
+    <span style="font-size:12px;letter-spacing:.03em">Children's Ground Store &mdash; First Nations Language resources and creative cultural products</span>
+    <button type="button" onClick="{{ closeTopBanner }}" aria-label="Close banner" title="Close" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border:0;border-radius:999px;background:none;color:#E4D8CC;cursor:pointer;display:grid;place-items:center;padding:0" style-hover="background:#3A2E24;color:#FBF6F1">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="5" x2="19" y2="19"></line><line x1="19" y1="5" x2="5" y2="19"></line></svg>
+    </button>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ promoBanner }}">
+    <div style="background:#9C3D10;color:#FFF6E8;padding:9px 20px;text-align:center;font-size:14px;letter-spacing:.02em">{{ promoBanner }}</div>
+  </sc-if>
+
+  <header onMouseLeave="{{ closeNav }}" style="position:sticky;top:0;z-index:40;background:#FBF6F1;border-bottom:1px solid #E3D5C9">
+    <div style="max-width:1660px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:20px;flex-wrap:nowrap">
+      <div style="display:flex;align-items:center;gap:28px;flex:none">
+        <a href="https://childrensground.org.au/" target="_blank" rel="noopener" title="Children's Ground Home" style="display:block;flex:none;padding-right:28px;border-right:1px solid #D9C6B7">
+          <img src="assets/cg-logo-v2.svg" alt="Children's Ground logo" style="width:46px;height:auto;display:block" />
+        </a>
+        <a href="#" onClick="{{ goHome }}" title="Store Home" style="display:flex;flex-direction:column;line-height:1.05;text-decoration:none;color:#17130F">
+          <span style="font-size:19px;font-weight:500;letter-spacing:.01em">Children's Ground</span>
+          <span style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#8A6A55">Store</span>
+        </a>
+      </div>
+
+      <sc-if value="{{ wideNav }}" hint-placeholder-val="{{ true }}">
+      <nav style="display:flex;gap:16px;align-items:center;justify-content:flex-end;margin-left:auto;flex-wrap:wrap;font-size:14px;flex:1 1 auto;min-width:0" data-nav-row="">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="7">
+          <div onMouseEnter="{{ n.hover }}" style="position:relative;padding:10px 0">
+            <a href="#" onClick="{{ n.go }}" style="{{ n.style }}">{{ n.name }} <span style="font-size:9px;color:#8A6A55">▾</span></a>
+            <sc-if value="{{ n.dropOpen }}">
+              <div style="position:absolute;top:100%;left:-10px;min-width:220px;background:#FBF6F1;border:1px solid #E3D5C9;box-shadow:0 18px 34px rgba(23,19,15,.16);padding:8px;z-index:50;display:flex;flex-direction:column;gap:2px">
+                <sc-for list="{{ n.subs }}" as="sb" hint-placeholder-count="4">
+                  <a href="#" onClick="{{ sb.open }}" style="font-size:15px;color:#4A3B31;text-decoration:none;padding:9px 12px;white-space:nowrap" style-hover="background:#F4E8E0;color:#17130F">{{ sb.name }}</a>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </nav>
+      </sc-if>
+
+      <sc-if value="{{ compactNav }}">
+        <button type="button" onClick="{{ toggleMenu }}" aria-label="Menu" title="Menu" style="margin-left:auto;flex:none;width:42px;height:42px;border-radius:999px;border:1px solid #C9B7A7;background:none;color:#17130F;cursor:pointer;display:grid;place-items:center" style-hover="background:#F4E8E0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="3.5" y1="7" x2="20.5" y2="7"></line><line x1="3.5" y1="12" x2="20.5" y2="12"></line><line x1="3.5" y1="17" x2="20.5" y2="17"></line></svg>
+        </button>
+      </sc-if>
+
+      <div style="display:flex;align-items:center;gap:10px;flex:none">
+        <a href="#" onClick="{{ toggleSearch }}" aria-label="Search the store" title="Search" style="color:#17130F;display:grid;place-items:center;width:40px;height:40px;border-radius:999px" style-hover="background:#F4E8E0">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="16.2" y1="16.2" x2="21" y2="21"></line></svg>
+        </a>
+        <div style="position:relative;flex:none">
+          <a href="#" onClick="{{ toggleAccountMenu }}" aria-label="Your account" title="Account" style="color:#17130F;display:grid;place-items:center;width:40px;height:40px;border-radius:999px" style-hover="background:#F4E8E0">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20c0-3.6 3.4-6 7.5-6s7.5 2.4 7.5 6"></path></svg>
+          </a>
+          <sc-if value="{{ accountMenuOpen }}">
+            <div style="position:absolute;top:100%;right:0;margin-top:10px;min-width:268px;background:#FBF6F1;border:1px solid #E3D5C9;box-shadow:0 18px 34px rgba(23,19,15,.16);padding:10px;z-index:55;display:flex;flex-direction:column;gap:2px">
+              <sc-for list="{{ accountMenu }}" as="am" hint-placeholder-count="4">
+                <a href="#" onClick="{{ am.open }}" style="font-size:15px;color:#4A3B31;text-decoration:none;padding:9px 10px" style-hover="background:#F4E8E0;color:#17130F">{{ am.name }}</a>
+              </sc-for>
+              <div style="border-top:1px solid #E3D5C9;margin:6px 0 4px;padding:10px 10px 4px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#8A6A55">Visit us &mdash; by appointment</div>
+              <sc-for list="{{ visitLocations }}" as="vl" hint-placeholder-count="4">
+                <a href="#" onClick="{{ goContact }}" style="font-size:15px;color:#4A3B31;text-decoration:none;padding:9px 10px" style-hover="background:#F4E8E0;color:#17130F">{{ vl.name }}</a>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+        <a href="#" onClick="{{ goCart }}" aria-label="Cart, {{ cartCount }} items" title="Cart" style="color:#17130F;display:grid;place-items:center;width:40px;height:40px;border-radius:999px;position:relative" style-hover="background:#F4E8E0">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+          <span aria-hidden="true" style="position:absolute;top:1px;right:-1px;background:#9C3D10;color:#FFF6E8;border-radius:999px;min-width:18px;height:18px;display:grid;place-items:center;font-size:11px;padding:0 5px;line-height:1">{{ cartCount }}</span>
+        </a>
+        <a href="#" onClick="{{ goDonate }}" style="background:#EDC71D;color:#17130F;padding:10px 20px;border-radius:999px;font-weight:500;text-decoration:none;font-size:15px" style-hover="background:#17130F;color:#EDC71D">Donate</a>
+      </div>
+    </div>
+
+    <sc-if value="{{ megaOpen }}">
+      <div style="position:absolute;left:0;right:0;top:100%;background:#FBF6F1;border-top:1px solid #E3D5C9;border-bottom:1px solid #E3D5C9;box-shadow:0 22px 40px rgba(23,19,15,.14);z-index:50">
+        <div style="max-width:1660px;margin:0 auto;padding:30px 28px 36px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:32px">
+          <sc-for list="{{ mega.cols }}" as="mc" hint-placeholder-count="3">
+            <div>
+              <a href="#" onClick="{{ mc.open }}" style="font-size:16px;font-weight:500;color:#9C3D10;text-decoration:none;display:block;margin-bottom:12px" style-hover="color:#17130F">{{ mc.name }}</a>
+              <sc-if value="{{ mc.hasPills }}">
+                <div style="display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-bottom:6px">
+                  <sc-for list="{{ mc.pills }}" as="mp" hint-placeholder-count="2">
+                    <a href="#" onClick="{{ mp.open }}" style="background:#EDC71D;color:#17130F;padding:7px 18px;border-radius:999px;font-size:15px;font-weight:500;text-decoration:none" style-hover="background:#17130F;color:#EDC71D">{{ mp.name }}</a>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <div style="display:flex;flex-direction:column;gap:9px">
+                <sc-for list="{{ mc.subs }}" as="ms" hint-placeholder-count="4">
+                  <a href="#" onClick="{{ ms.open }}" style="font-size:15px;color:#4A3B31;text-decoration:none" style-hover="color:#17130F;text-decoration:underline">{{ ms.name }}</a>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+          <sc-for list="{{ mega.tiles }}" as="mt" hint-placeholder-count="2">
+            <a href="#" onClick="{{ mt.open }}" style="text-decoration:none;color:#17130F;display:flex;flex-direction:column;gap:10px">
+              <div role="img" aria-label="{{ mt.alt }}" style="width:100%;aspect-ratio:4/3;background-image:url({{ mt.img }});background-size:cover;background-position:center;background-color:#EFE2D7;border:1px solid #E3D5C9"></div>
+              <span style="font-size:14px;line-height:1.4">{{ mt.title }}</span>
+              <span style="font-size:14px;color:#6E5C4F">{{ mt.price }}</span>
+            </a>
+          </sc-for>
+          <div style="background:#F4E8E0;padding:22px;display:flex;flex-direction:column;gap:12px;align-self:start">
+            <sc-if value="{{ mega.hasFeatured }}">
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <sc-for list="{{ mega.featured }}" as="ft" hint-placeholder-count="1">
+                  <a href="#" onClick="{{ ft.open }}" style="background:#EDC71D;color:#17130F;padding:6px 14px;border-radius:999px;font-size:13px;text-decoration:none;font-weight:500" style-hover="background:#17130F;color:#EDC71D">{{ ft.name }}</a>
+                </sc-for>
+              </div>
+            </sc-if>
+            <div style="font-size:15px;line-height:1.6;color:#4A3B31">{{ mega.blurb }}</div>
+            <a href="#" onClick="{{ mega.open }}" style="font-size:15px;border-bottom:1px solid #9C3D10;align-self:flex-start;padding-bottom:2px">{{ mega.cta }} →</a>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ menuOpen }}">
+      <div style="border-top:1px solid #E3D5C9;background:#F4E8E0">
+        <div style="max-width:1280px;margin:0 auto;padding:28px 24px 34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px">
+          <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="7">
+            <div>
+              <a href="#" onClick="{{ n.openFirst }}" style="font-size:17px;font-weight:500;color:#9C3D10;text-decoration:none;display:block;margin-bottom:12px">{{ n.name }}</a>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ n.subs }}" as="s" hint-placeholder-count="3">
+                  <a href="#" onClick="{{ s.open }}" style="font-size:15px;color:#4A3B31;text-decoration:none" style-hover="color:#17130F">{{ s.name }}</a>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+          <div style="background:#FBF6F1;padding:20px;border-radius:2px">
+            <div style="font-size:15px;line-height:1.6;color:#4A3B31">Every item is designed, illustrated and written by First Nations children and adults in the communities we work with.</div>
+            <a href="#" onClick="{{ goShop }}" style="display:inline-block;margin-top:14px;font-size:15px;border-bottom:1px solid #9C3D10">All products →</a>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ searchOpen }}">
+      <div style="border-top:1px solid #E3D5C9;background:#FBF6F1;box-shadow:0 22px 34px rgba(23,19,15,.14)">
+        <div style="max-width:1280px;margin:0 auto;padding:24px 24px 30px">
+          <div style="display:flex;gap:16px;align-items:center;margin-bottom:24px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A6A55" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="16.2" y1="16.2" x2="21" y2="21"></line></svg>
+            <input type="search" value="{{ q }}" onChange="{{ setQ }}" placeholder="Search books, art, clothing…" aria-label="Search the store" style="flex:1;border:0;border-bottom:2px solid #17130F;background:none;padding:10px 0;font-size:clamp(18px,2.4vw,24px);color:#17130F;outline:none" />
+            <button type="button" onClick="{{ toggleSearch }}" aria-label="Close search" style="width:38px;height:38px;border-radius:999px;border:1px solid #C9B7A7;background:none;color:#17130F;font-size:15px;cursor:pointer" style-hover="background:#F4E8E0">✕</button>
+          </div>
+          <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:20px">
+                <sc-for list="{{ popupResults }}" as="p" hint-placeholder-count="4">
+                  <a href="#" onClick="{{ p.open }}" style="text-decoration:none;color:#17130F;display:block">
+                    <div role="img" aria-label="{{ p.alt }}" style="width:100%;aspect-ratio:1/1;background-image:url({{ p.img }});background-size:cover;background-position:center;background-color:#EFE2D7;border:1px solid #E3D5C9"></div>
+                    <div style="font-size:15px;line-height:1.35;margin:10px 0 4px;text-wrap:pretty">{{ p.title }}</div>
+                    <div style="font-size:14px;color:#4A3B31">{{ p.price }}</div>
+                  </a>
+                </sc-for>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:24px">
+                <span style="font-size:14px;color:#6E5C4F">{{ searchCount }} results</span>
+                <a href="#" onClick="{{ goSearch }}" style="font-size:15px;border-bottom:1px solid #9C3D10;padding-bottom:2px">View more →</a>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noResults }}">
+            <div style="font-size:16px;color:#6E5C4F;padding:6px 0 12px">No products match &ldquo;{{ q }}&rdquo; — try &ldquo;birds&rdquo;, &ldquo;tote&rdquo; or &ldquo;print&rdquo;.</div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+  </header>
+
+  <!-- ===================== HOME ===================== -->
+  <sc-if value="{{ pg.home }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <section style="position:relative;background:#17130F;color:#FBF6F1;min-height:min(80vh,760px);display:flex;align-items:flex-end;overflow:hidden">
+        <sc-for list="{{ heroLayers }}" as="l" hint-placeholder-count="1">
+          <div role="img" aria-label="{{ l.alt }}" style="{{ l.style }}"></div>
+        </sc-for>
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,19,15,.5) 0%,rgba(23,19,15,.2) 30%,rgba(23,19,15,.88) 100%)"></div>
+        <div style="position:relative;width:100%;max-width:1280px;margin:0 auto;padding:130px 24px 40px">
+          <div style="font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#F0E2D3;margin-bottom:14px">{{ slide.eyebrow }}</div>
+          <div data-display="" style="font-size:clamp(44px,7.4vw,96px);line-height:.95;color:#EDC71D;margin-bottom:18px;max-width:24ch">{{ slide.display }}</div>
+          <p style="font-size:20px;line-height:1.6;color:#EFE5DA;margin:0 0 32px;max-width:50ch;text-wrap:pretty">{{ slide.body }}</p>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <a href="#" onClick="{{ slide.go }}" style="background:#EDC71D;color:#17130F;padding:15px 32px;border-radius:999px;font-size:16px;font-weight:500;text-decoration:none" style-hover="background:#FBF6F1">{{ slide.cta }}</a>
+            <a href="#" onClick="{{ goDonate }}" style="border:1px solid rgba(251,246,241,.55);color:#FBF6F1;padding:15px 32px;border-radius:999px;font-size:16px;text-decoration:none;background:rgba(23,19,15,.3)" style-hover="border-color:#FBF6F1">Donate</a>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;margin-top:44px">
+            <button type="button" onClick="{{ prevSlide }}" aria-label="Previous slide" style="width:42px;height:42px;border-radius:999px;border:1px solid rgba(251,246,241,.4);background:rgba(23,19,15,.35);color:#FBF6F1;font-size:16px;cursor:pointer;display:grid;place-items:center" style-hover="background:#EDC71D;color:#17130F;border-color:#EDC71D">&#8592;</button>
+            <button type="button" onClick="{{ nextSlide }}" aria-label="Next slide" style="width:42px;height:42px;border-radius:999px;border:1px solid rgba(251,246,241,.4);background:rgba(23,19,15,.35);color:#FBF6F1;font-size:16px;cursor:pointer;display:grid;place-items:center" style-hover="background:#EDC71D;color:#17130F;border-color:#EDC71D">&#8594;</button>
+            <div style="display:flex;gap:9px;margin-left:6px">
+              <sc-for list="{{ dots }}" as="d" hint-placeholder-count="3">
+                <button type="button" onClick="{{ d.go }}" aria-label="{{ d.label }}" style="{{ d.style }}"></button>
+              </sc-for>
+            </div>
+            <span style="margin-left:auto;font:500 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:#C7B09A;text-transform:uppercase">Confirm photo permissions before publishing</span>
+          </div>
+        </div>
+      </section>
+
+      <div style="background:#EDC71D;color:#17130F;overflow:hidden;padding:14px 0;border-top:2px solid #17130F;border-bottom:2px solid #17130F">
+        <div style="display:flex;justify-content:center;flex-wrap:wrap">
+          <sc-for list="{{ marquee }}" as="m" hint-placeholder-count="8">
+            <span data-display="" style="font-size:20px;padding:0 26px;white-space:nowrap">{{ m.text }}</span>
+          </sc-for>
+        </div>
+      </div>
+
+      <section style="max-width:1280px;margin:0 auto;padding:76px 24px 0">
+        <div style="font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#9C3D10;margin-bottom:14px">Shop by categories</div>
+        <h2 style="font-size:clamp(28px,3.6vw,40px);line-height:1.08;margin:0 0 30px">Where would you like to start?</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px">
+          <sc-for list="{{ collections }}" as="c" hint-placeholder-count="4">
+            <a href="#" onClick="{{ c.open }}" style="text-decoration:none;color:#17130F;display:block;position:relative;overflow:hidden;background:#17130F">
+              <div role="img" aria-label="{{ c.imgAlt }}" style="width:100%;aspect-ratio:4/5;background-image:url({{ c.img }});background-size:cover;background-position:center;background-color:#EADCCF"></div>
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,19,15,0) 38%,rgba(23,19,15,.82) 100%)"></div>
+              <div style="position:absolute;left:0;right:0;bottom:0;padding:20px">
+                <div data-display="" style="font-size:24px;line-height:1.02;color:#EDC71D;margin-bottom:6px">{{ c.name }}</div>
+                <div style="font-size:14px;color:#F0E2D3">{{ c.count }}</div>
+              </div>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="max-width:1280px;margin:0 auto;padding:76px 24px 0">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:8px">
+          <div>
+            <div style="font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#9C3D10;margin-bottom:14px">Favourites</div>
+            <h2 style="font-size:clamp(28px,3.6vw,40px);line-height:1.08;margin:0">Community favourites</h2>
+          </div>
+          <a href="#" onClick="{{ tabViewAll }}" style="font-size:16px;border-bottom:1px solid #9C3D10;padding-bottom:2px">View all {{ tabName }} →</a>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;border-bottom:1px solid #E3D5C9;padding:22px 0 0;margin-bottom:30px">
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+            <button type="button" onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.name }}</button>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(226px,1fr));gap:30px 24px">
+          <sc-for list="{{ tabProducts }}" as="p" hint-placeholder-count="4">
+            <a href="#" onClick="{{ p.open }}" style="text-decoration:none;color:#17130F;display:block">
+              <div style="position:relative">
+                <div role="img" aria-label="{{ p.alt }}" style="width:100%;aspect-ratio:1/1;background-image:url({{ p.img }});background-size:cover;background-position:center;background-color:#EFE2D7;border:1px solid #E3D5C9"></div>
+                <sc-if value="{{ p.tag }}">
+                  <span style="position:absolute;top:10px;left:10px;background:#9C3D10;color:#FFF6E8;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px">{{ p.tag }}</span>
+                </sc-if>
+              </div>
+              <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8A6A55;margin:14px 0 6px">{{ p.sub }}</div>
+              <div style="font-size:17px;line-height:1.35;margin-bottom:8px;text-wrap:pretty">{{ p.title }}</div>
+              <div style="font-size:16px;color:#4A3B31;margin-bottom:10px">{{ p.price }}</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <sc-for list="{{ p.opts }}" as="o" hint-placeholder-count="3">
+                  <span style="border:1px solid #DCC9B8;color:#6E5C4F;font-size:11px;letter-spacing:.06em;padding:4px 9px;text-transform:uppercase">{{ o.label }}</span>
+                </sc-for>
+              </div>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="margin:88px 0 0;background:#9C3D10;color:#FFF6E8">
+        <div style="max-width:1280px;margin:0 auto;padding:76px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:52px;align-items:center">
+          <div>
+            <div data-display="" style="font-size:clamp(30px,4.4vw,52px);line-height:1;color:#EDC71D;margin-bottom:18px">Donate today</div>
+            <h2 style="font-size:clamp(26px,3.2vw,38px);line-height:1.15;margin:0 0 20px">Your donation backs a system designed by community</h2>
+            <p style="font-size:19px;line-height:1.65;margin:0 0 12px;max-width:48ch;color:#F6E4D6;text-wrap:pretty">Children's Ground is different because it is run by us. We are creating a new future for our next generations. A future full of opportunity and hope.</p>
+            <p style="font-size:15px;color:#EBCDB8;margin:0">Donations over $2 are tax deductible.</p>
+          </div>
+          <div style="background:#FBF6F1;color:#17130F;padding:32px">
+            <div style="font-size:18px;font-weight:500;margin-bottom:18px">Donate today</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+              <sc-for list="{{ amounts }}" as="a" hint-placeholder-count="4">
+                <button type="button" onClick="{{ a.pick }}" style="{{ a.style }}">{{ a.label }}</button>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:10px;margin-bottom:20px">
+              <button type="button" onClick="{{ setOnce }}" style="{{ onceStyle }}">One-off</button>
+              <button type="button" onClick="{{ setMonthly }}" style="{{ monthlyStyle }}">Monthly</button>
+            </div>
+            <a href="#" onClick="{{ goDonate }}" style="display:block;text-align:center;background:#17130F;color:#EDC71D;padding:15px;border-radius:999px;font-size:16px;text-decoration:none" style-hover="background:#9C3D10;color:#FFF6E8">Donate {{ donateLabel }}</a>
+            <div style="font-size:13px;color:#6E5C4F;margin-top:14px;line-height:1.5">Donations are handled separately from your shopping cart, so your gift goes straight to Children's Ground.</div>
+          </div>
+        </div>
+      </section>
+
+      <section style="background:#17130F;color:#FBF6F1">
+        <div style="max-width:1280px;margin:0 auto;padding:84px 24px;text-align:center">
+          <div style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:#EDC71D;margin-bottom:26px">Children's Ground</div>
+          <p style="font-size:clamp(22px,2.9vw,34px);line-height:1.35;font-weight:500;margin:0 auto 22px;max-width:24ch;text-wrap:balance">We are a First Nations organisation, with a First Nations approach.</p>
+          <p style="font-size:clamp(18px,2vw,22px);line-height:1.55;color:#E4D8CC;margin:0 auto 22px;max-width:52ch;text-wrap:pretty">Designed, led and delivered by community. A new approach to learning, health and employment — and it's working.</p>
+          <p style="font-size:clamp(18px,2vw,22px);line-height:1.55;color:#E4D8CC;margin:0 auto 34px;max-width:52ch;text-wrap:pretty">It's more than a purchase, it's backing a system built by us.</p>
+          <a href="#" onClick="{{ goAbout }}" style="display:inline-block;border:1px solid rgba(251,246,241,.5);color:#FBF6F1;padding:15px 34px;border-radius:999px;font-size:16px;text-decoration:none" style-hover="background:#EDC71D;color:#17130F;border-color:#EDC71D">About us</a>
+        </div>
+      </section>
+
+      <section style="max-width:1280px;margin:0 auto;padding:84px 24px 0">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px">
+          <div style="background:#F4E8E0;padding:34px;display:flex;flex-direction:column;gap:14px">
+              <div style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#9C3D10">By appointment</div>
+              <div data-display="" style="font-size:26px;line-height:1.05">Visit Us</div>
+              <div style="display:flex;flex-direction:column;margin-top:4px">
+                <sc-for list="{{ visitLocations }}" as="vl" hint-placeholder-count="5">
+                  <a href="#" onClick="{{ goContact }}" style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #E0CDBC;font-size:17px;color:#3A2E24;text-decoration:none" style-hover="color:#9C3D10"><span>{{ vl.name }}</span><span style="font-size:14px;color:#9C3D10;white-space:nowrap">Book →</span></a>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background:#F4E8E0;padding:34px;display:flex;flex-direction:column;gap:14px">
+              <div style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#9C3D10">Stockists &amp; markets</div>
+              <div data-display="" style="font-size:26px;line-height:1.05">Find Us</div>
+              <div style="font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#6E5C4F;margin-top:4px">Markets</div>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ findMarkets }}" as="fm" hint-placeholder-count="1">
+                  <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #E0CDBC;font-size:17px;color:#3A2E24"><span>{{ fm.name }}</span><span style="font-size:15px;color:#6E5C4F;text-align:right">{{ fm.detail }}</span></div>
+                </sc-for>
+              </div>
+              <div style="font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#6E5C4F;margin-top:8px">Stockists</div>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ findStockists }}" as="fs" hint-placeholder-count="1">
+                  <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #E0CDBC;font-size:17px;color:#3A2E24"><span>{{ fs.name }}</span><span style="font-size:15px;color:#6E5C4F;text-align:right">{{ fs.detail }}</span></div>
+                </sc-for>
+              </div>
+            </div>
+        </div>
+      </section>
+
+      <div style="margin-top:84px;background:#9C3D10;color:#FFF6E8;overflow:hidden;padding:14px 0">
+        <div style="display:flex;justify-content:center;flex-wrap:wrap">
+          <sc-for list="{{ marquee2 }}" as="m" hint-placeholder-count="8">
+            <span data-display="" style="font-size:20px;padding:0 26px;white-space:nowrap">{{ m.text }}</span>
+          </sc-for>
+        </div>
+      </div>
+
+      <section style="margin:0;background:#F4E8E0">
+        <div style="max-width:1280px;margin:0 auto;padding:76px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:36px">
+          <sc-for list="{{ quotes }}" as="q" hint-placeholder-count="3">
+            <figure style="margin:0;display:flex;flex-direction:column;gap:18px">
+              <span style="font-size:44px;line-height:.6;color:#EDC71D">&ldquo;</span>
+              <blockquote style="margin:0;font-size:21px;line-height:1.5;font-weight:300;text-wrap:pretty">{{ q.text }}</blockquote>
+              <figcaption style="font-size:14px;color:#6E5C4F;line-height:1.5">{{ q.who }}</figcaption>
+            </figure>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+
+  <!-- ===================== SHOP / ALL PRODUCTS ===================== -->
+  <sc-if value="{{ pg.shop }}">
+    <div>
+      <section style="background:#17130F;color:#FBF6F1">
+        <div style="max-width:1280px;margin:0 auto;padding:64px 24px">
+          <h1 style="font-size:clamp(34px,5vw,56px);margin:0 0 18px">Shop</h1>
+          <p style="font-size:18px;line-height:1.65;max-width:70ch;color:#E4D8CC;margin:0;text-wrap:pretty">All our products are designed, illustrated and written by First Nations children and adults in the communities we work with in the NT. All profits go back to the artists and Children's Ground to support these families and further their enterprise and resource development projects.</p>
+        </div>
+      </section>
+
+      <section style="max-width:1280px;margin:0 auto;padding:56px 24px 0">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px">
+          <sc-for list="{{ collections }}" as="c" hint-placeholder-count="4">
+            <a href="#" onClick="{{ c.open }}" style="text-decoration:none;color:#17130F;background:#F4E8E0;padding:22px;display:flex;flex-direction:column;gap:8px" style-hover="background:#EFDCD0">
+              <span style="font-size:20px">{{ c.name }}</span>
+              <span style="font-size:14px;color:#6E5C4F">{{ c.count }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="max-width:1280px;margin:0 auto;padding:52px 24px 0">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;border-bottom:1px solid #E3D5C9;padding-bottom:18px;margin-bottom:34px">
+          <div style="font-size:16px;color:#4A3B31">Showing {{ allCount }} products</div>
+          <label style="display:flex;align-items:center;gap:10px;font-size:15px;color:#4A3B31">Sort by
+            <select style="border:1px solid #C9B7A7;background:#FBF6F1;padding:9px 12px;font-size:15px;color:#17130F">
+              <option>A – Z</option><option>New arrivals</option><option>Price: Low to High</option>
+            </select>
+          </label>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(226px,1fr));gap:26px 24px">
+          <sc-for list="{{ allProducts }}" as="p" hint-placeholder-count="8">
+            <a href="#" onClick="{{ p.open }}" style="text-decoration:none;color:#17130F;display:block">
+              <div style="position:relative">
+                <div role="img" aria-label="{{ p.alt }}" style="width:100%;aspect-ratio:1/1;background-image:url({{ p.img }});background-size:cover;background-position:center;background-color:#EFE2D7;border:1px solid #E3D5C9"></div>
+                <sc-if value="{{ p.tag }}">
+                  <span style="position:absolute;top:10px;left:10px;background:#9C3D10;color:#FFF6E8;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px">{{ p.tag }}</span>
+                </sc-if>
+              </div>
+              <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8A6A55;margin:14px 0 6px">{{ p.sub }}</div>
+              <div style="font-size:17px;line-height:1.35;margin-bottom:6px;text-wrap:pretty">{{ p.title }}</div>
+              <div style="font-size:16px;color:#4A3B31">{{ p.price }}</div>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+
+  <!-- ===================== COLLECTION ===================== -->
+  <sc-if value="{{ pg.collection }}">
+    <div>
+      <section style="background:#9C3D10;color:#FFF6E8">
+        <div style="max-width:1280px;margin:0 auto;padding:56px 24px">
+          <div style="font-size:14px;color:#EBCDB8;margin-bottom:16px"><a href="#" onClick="{{ goShop }}" style="color:#EBCDB8">Shop</a> &nbsp;/&nbsp; {{ coll.name }}</div>
+          <h1 style="font-size:clamp(32px,5vw,52px);margin:0 0 16px">{{ coll.name }}</h1>
+          <p style="font-size:18px;line-height:1.6;max-width:60ch;margin:0;color:#F6E4D6;text-wrap:pretty">{{ coll.blurb }}</p>
+        </div>
+      </section>
+
+      <section style="max-width:1280px;margin:0 auto;padding:44px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:44px;align-items:start">
+        <aside style="min-width:220px">
+          <div style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#8A6A55;margin-bottom:16px">Browse {{ coll.name }}</div>
+          <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:34px">
+            <sc-for list="{{ subFilters }}" as="s" hint-placeholder-count="4">
+              <a href="#" onClick="{{ s.pick }}" style="{{ s.style }}">{{ s.name }}</a>
+            </sc-for>
+          </div>
+          <div style="margin-top:34px;background:#F4E8E0;padding:20px;font-size:15px;line-height:1.6;color:#4A3B31">All profits go back to the artists and to Children's Ground.</div>
+        </aside>
+
+        <div style="grid-column:span 3;min-width:0">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;border-bottom:1px solid #E3D5C9;padding-bottom:16px;margin-bottom:30px">
+            <div style="font-size:16px;color:#4A3B31">{{ collCount }} products</div>
+            <label style="display:flex;align-items:center;gap:10px;font-size:15px;color:#4A3B31">Sort by
+              <select style="border:1px solid #C9B7A7;background:#FBF6F1;padding:9px 12px;font-size:15px;color:#17130F"><option>A – Z</option><option>New arrivals</option><option>Price: Low to High</option></select>
+            </label>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:26px 24px">
+            <sc-for list="{{ collProducts }}" as="p" hint-placeholder-count="6">
+              <a href="#" onClick="{{ p.open }}" style="text-decoration:none;color:#17130F;display:block">
+                <div role="img" aria-label="{{ p.alt }}" style="width:100%;aspect-ratio:1/1;background-image:url({{ p.img }});background-size:cover;background-position:center;background-color:#EFE2D7;border:1px solid #E3D5C9"></div>
+                <div style="font-size:17px;line-height:1.35;margin:14px 0 6px;text-wrap:pretty">{{ p.title }}</div>
+                <div style="font-size:16px;color:#4A3B31">{{ p.price }}</div>
+              </a>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+
+  <!-- ===================== PRODUCT ===================== -->
+  <sc-if value="{{ pg.product }}">
+    <div style="max-width:1280px;margin:0 auto;padding:32px 24px 0">
+      <div style="font-size:14px;color:#6E5C4F;margin-bottom:28px"><a href="#" onClick="{{ goShop }}">Shop</a> / <a href="#" onClick="{{ goCollection }}">{{ product.collection }}</a> / {{ product.sub }}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:56px;align-items:start">
+        <div>
+          <div role="img" aria-label="{{ product.alt }}" style="width:100%;aspect-ratio:1/1;background-image:url({{ product.img }});background-size:cover;background-position:center;background-color:#EFE2D7;border:1px solid #E3D5C9"></div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px">
+            <sc-for list="{{ thumbs }}" as="t" hint-placeholder-count="4">
+              <div role="img" aria-label="{{ t.label }}" style="width:100%;aspect-ratio:1/1;background-image:url({{ t.img }});background-size:cover;background-position:center;background-color:#EFE2D7;border:1px solid #E3D5C9"></div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9C3D10;margin-bottom:14px">{{ product.sub }}</div>
+          <h1 style="font-size:clamp(28px,3.6vw,42px);line-height:1.12;margin:0 0 16px;text-wrap:pretty">{{ product.title }}</h1>
+          <div style="font-size:24px;margin-bottom:8px">{{ product.price }}</div>
+          <div style="font-size:15px;color:#6E5C4F;margin-bottom:26px">Free 2026 calendar included with every order</div>
+
+          <p style="font-size:17px;line-height:1.7;color:#3A2E24;margin:0 0 28px;max-width:52ch;text-wrap:pretty">{{ product.desc }}</p>
+
+          <div style="margin-bottom:22px">
+            <div style="font-size:14px;letter-spacing:.06em;margin-bottom:10px">{{ variantLabel }}</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <sc-for list="{{ variants }}" as="v" hint-placeholder-count="3">
+                <button type="button" onClick="{{ v.pick }}" style="{{ v.style }}">{{ v.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:28px">
+            <div style="display:flex;align-items:center;border:1px solid #C9B7A7">
+              <button type="button" onClick="{{ dec }}" aria-label="Decrease quantity" style="background:none;border:0;padding:13px 16px;font-size:17px;cursor:pointer;color:#17130F">−</button>
+              <span style="min-width:32px;text-align:center;font-size:16px">{{ qty }}</span>
+              <button type="button" onClick="{{ inc }}" aria-label="Increase quantity" style="background:none;border:0;padding:13px 16px;font-size:17px;cursor:pointer;color:#17130F">+</button>
+            </div>
+            <button type="button" onClick="{{ addToCart }}" style="flex:1;min-width:200px;background:#17130F;color:#EDC71D;border:0;padding:16px 30px;border-radius:999px;font-size:16px;cursor:pointer" style-hover="background:#9C3D10;color:#FFF6E8">{{ addLabel }}</button>
+          </div>
+
+          <div style="border-top:1px solid #E3D5C9">
+            <sc-for list="{{ accordions }}" as="a" hint-placeholder-count="3">
+              <div style="border-bottom:1px solid #E3D5C9">
+                <button type="button" onClick="{{ a.toggle }}" style="width:100%;background:none;border:0;padding:20px 0;display:flex;justify-content:space-between;align-items:center;font-size:17px;cursor:pointer;color:#17130F;text-align:left">{{ a.title }}<span style="color:#9C3D10;font-size:18px">{{ a.icon }}</span></button>
+                <sc-if value="{{ a.open }}">
+                  <p style="font-size:16px;line-height:1.7;color:#4A3B31;margin:0 0 22px;max-width:56ch;text-wrap:pretty">{{ a.body }}</p>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <section style="margin:80px 0 0;background:#F4E8E0;padding:48px 32px;text-align:center">
+        <div data-display="" style="font-size:clamp(28px,3.6vw,42px);line-height:1;color:#9C3D10;margin-bottom:14px">Where the money goes</div>
+        <p style="font-size:clamp(20px,2.6vw,28px);font-weight:300;line-height:1.45;max-width:60ch;margin:0 auto;text-wrap:pretty">All profits go back to the artists and to Children's Ground, to support these families and further their enterprise and resource development projects.</p>
+      </section>
+
+      <section style="padding:72px 0 0">
+        <h2 style="font-size:30px;margin:0 0 28px">You may also like</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:24px">
+          <sc-for list="{{ related }}" as="p" hint-placeholder-count="4">
+            <a href="#" onClick="{{ p.open }}" style="text-decoration:none;color:#17130F;display:block">
+              <div role="img" aria-label="{{ p.alt }}" style="width:100%;aspect-ratio:1/1;background-image:url({{ p.img }});background-size:cover;background-position:center;background-color:#EFE2D7;border:1px solid #E3D5C9"></div>
+              <div style="font-size:16px;line-height:1.35;margin:12px 0 5px">{{ p.title }}</div>
+              <div style="font-size:15px;color:#4A3B31">{{ p.price }}</div>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+
+  <!-- ===================== ABOUT ===================== -->
+  <sc-if value="{{ pg.about }}">
+    <div>
+      <section style="background:#17130F;color:#FBF6F1">
+        <div style="max-width:1280px;margin:0 auto;padding:88px 24px;display:flex;gap:32px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap">
+          <div style="min-width:0">
+            <h1 style="font-size:clamp(34px,5.4vw,62px);line-height:1.06;margin:0 0 22px;max-width:20ch">About Children's Ground Store</h1>
+            <p style="font-size:21px;line-height:1.6;max-width:56ch;color:#E4D8CC;margin:0;text-wrap:pretty">Developing First Nations Language resources and creative cultural products.</p>
+          </div>
+          <a href="#about-contact" style="flex:none;background:#EDC71D;color:#17130F;padding:14px 28px;border-radius:999px;font-size:16px;text-decoration:none;font-weight:500" style-hover="background:#FBF6F1">Contact Us</a>
+        </div>
+      </section>
+      <section style="max-width:1280px;margin:0 auto;padding:72px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:56px;align-items:start">
+        <div>
+          <p style="font-size:19px;line-height:1.75;margin:0 0 30px;text-wrap:pretty">Children's Ground Store is an exciting and growing social enterprise that support the creation of unique First Nations Language resources and creative cultural products. All our products are designed, illustrated and written by First Nations children and adults in the communities we work with in the NT. All profits go back to the artists and Children's Ground to support these families and further their enterprise and resource development projects. Our enterprise activities are conducted professionally and comply with the principles of best practice set out in the Australia Council's First Nations Cultural and Intellectual Property in the Arts protocol.</p>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:30px">
+            <a href="https://childrensground.org.au/childrens-ground-in-action/" target="_blank" rel="noopener" style="font-size:17px;border-bottom:1px solid #9C3D10;align-self:flex-start;padding-bottom:2px">CG programs &mdash; Children's Ground in action &nearr;</a>
+            <a href="https://childrensground.org.au/advocacies-and-actions/" target="_blank" rel="noopener" style="font-size:17px;border-bottom:1px solid #9C3D10;align-self:flex-start;padding-bottom:2px">Support our recent campaign &nearr;</a>
+          </div>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <a href="#" onClick="{{ goShop }}" style="background:#17130F;color:#EDC71D;padding:15px 28px;border-radius:999px;text-decoration:none;font-size:16px">Shop the store</a>
+            <a href="#" onClick="{{ goDonate }}" style="border:1px solid #C9B7A7;color:#17130F;padding:15px 28px;border-radius:999px;text-decoration:none;font-size:16px">Donate</a>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <img src="assets/img/kids/bush-medicine.jpg" alt="An Elder shares bush medicine with children on Country" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#EFE2D7;border:1px solid #E3D5C9" />
+          <div style="background:#F4E8E0;padding:26px">
+            <div style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#9C3D10;margin-bottom:12px">Where we work</div>
+            <div style="display:flex;flex-direction:column;gap:10px;font-size:16px;color:#3A2E24">
+              <span>Mparntwe - Alice Springs</span>
+              <span>Altarpilta - Plenty Hwy</span>
+              <span>Malkawo - Top End</span>
+              <span>Garramilla - Darwin</span>
+              <span>Naarm - Melbourne</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section style="max-width:1280px;margin:0 auto;padding:72px 24px 0">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:36px">
+          <sc-for list="{{ quotes }}" as="q" hint-placeholder-count="3">
+            <figure style="margin:0;display:flex;flex-direction:column;gap:16px;border-top:2px solid #EDC71D;padding-top:22px">
+              <blockquote style="margin:0;font-size:20px;line-height:1.5;font-weight:300;text-wrap:pretty">{{ q.text }}</blockquote>
+              <figcaption style="font-size:14px;color:#6E5C4F">{{ q.who }}</figcaption>
+            </figure>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="max-width:1280px;margin:0 auto;padding:84px 24px 0">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px">
+          <div style="background:#F4E8E0;padding:34px;display:flex;flex-direction:column;gap:14px">
+              <div style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#9C3D10">By appointment</div>
+              <div data-display="" style="font-size:26px;line-height:1.05">Visit Us</div>
+              <div style="display:flex;flex-direction:column;margin-top:4px">
+                <sc-for list="{{ visitLocations }}" as="vl" hint-placeholder-count="5">
+                  <a href="#about-contact" style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #E0CDBC;font-size:17px;color:#3A2E24;text-decoration:none" style-hover="color:#9C3D10"><span>{{ vl.name }}</span><span style="font-size:14px;color:#9C3D10;white-space:nowrap">Book →</span></a>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background:#F4E8E0;padding:34px;display:flex;flex-direction:column;gap:14px">
+              <div style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#9C3D10">Stockists &amp; markets</div>
+              <div data-display="" style="font-size:26px;line-height:1.05">Find Us</div>
+              <div style="font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#6E5C4F;margin-top:4px">Markets</div>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ findMarkets }}" as="fm" hint-placeholder-count="1">
+                  <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #E0CDBC;font-size:17px;color:#3A2E24"><span>{{ fm.name }}</span><span style="font-size:15px;color:#6E5C4F;text-align:right">{{ fm.detail }}</span></div>
+                </sc-for>
+              </div>
+              <div style="font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#6E5C4F;margin-top:8px">Stockists</div>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ findStockists }}" as="fs" hint-placeholder-count="1">
+                  <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #E0CDBC;font-size:17px;color:#3A2E24"><span>{{ fs.name }}</span><span style="font-size:15px;color:#6E5C4F;text-align:right">{{ fs.detail }}</span></div>
+                </sc-for>
+              </div>
+            </div>
+        </div>
+      </section>
+
+      <!-- TENTATIVE: About-page contact form — not confirmed by client. Delete this whole <section id="about-contact"> to remove. -->
+      <section id="about-contact" style="max-width:1280px;margin:0 auto;padding:84px 24px 0">
+        <div style="background:#FFFFFF;border:1px solid #E3D5C9;padding:36px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:40px;align-items:start">
+          <div>
+            <h2 style="font-size:30px;margin:0 0 14px">Contact Us</h2>
+            <p style="font-size:17px;line-height:1.7;color:#4A3B31;margin:0;max-width:44ch;text-wrap:pretty">Questions about a product, a wholesale order, or visiting us by appointment? Send us a message and we will get back to you.</p>
+          </div>
+          <form style="display:flex;flex-direction:column;gap:16px">
+            <input type="text" placeholder="Your name" style="border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px" />
+            <input type="email" placeholder="Email address" style="border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px" />
+            <textarea rows="4" placeholder="Message" style="border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px;resize:vertical"></textarea>
+            <button type="button" style="align-self:flex-start;background:#17130F;color:#EDC71D;border:0;padding:15px 32px;border-radius:999px;font-size:16px;cursor:pointer" style-hover="background:#9C3D10;color:#FFF6E8">Send message</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+
+  <!-- ===================== DONATE ===================== -->
+  <sc-if value="{{ pg.donate }}">
+    <div>
+      <section style="position:relative;background:#9C3D10;color:#FFF6E8;overflow:hidden">
+        <img src="assets/img/kids/father-child.jpg" alt="A father lifts his laughing son at a Children's Ground event" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%" />
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(97,35,7,.94) 0%,rgba(112,44,11,.82) 42%,rgba(23,19,15,.3) 100%)"></div>
+        <div style="position:relative;max-width:1280px;margin:0 auto;padding:96px 24px">
+          <div data-display="" style="font-size:clamp(38px,6vw,72px);line-height:.95;color:#EDC71D;margin-bottom:16px">Walk with us</div>
+          <h1 style="font-size:clamp(28px,3.6vw,44px);line-height:1.12;margin:0 0 20px;max-width:20ch">Donate to Children's Ground</h1>
+          <p style="font-size:20px;line-height:1.65;max-width:56ch;margin:0;color:#F6E4D6;text-wrap:pretty">Your gift backs a system designed, led and delivered by First Nations communities. Donations over $2 are tax deductible.</p>
+        </div>
+      </section>
+      <section style="max-width:1280px;margin:0 auto;padding:64px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:56px;align-items:start">
+        <div style="background:#FFFFFF;border:1px solid #E3D5C9;padding:34px">
+          <div style="display:flex;gap:10px;margin-bottom:26px">
+            <button type="button" onClick="{{ setOnce }}" style="{{ onceStyleLg }}">Donate once</button>
+            <button type="button" onClick="{{ setMonthly }}" style="{{ monthlyStyleLg }}">Donate monthly</button>
+          </div>
+          <div style="font-size:14px;letter-spacing:.06em;margin-bottom:12px">Choose an amount</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px;margin-bottom:14px">
+            <sc-for list="{{ amountsLg }}" as="a" hint-placeholder-count="4">
+              <button type="button" onClick="{{ a.pick }}" style="{{ a.style }}">{{ a.label }}</button>
+            </sc-for>
+          </div>
+          <input type="text" placeholder="Other amount (AUD)" style="width:100%;border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px;margin-bottom:22px" />
+          <div style="background:#F4E8E0;padding:18px;font-size:16px;line-height:1.6;color:#3A2E24;margin-bottom:24px">{{ impactLine }}</div>
+          <a href="#" onClick="{{ goCheckout }}" style="display:block;text-align:center;background:#17130F;color:#EDC71D;padding:17px;border-radius:999px;font-size:17px;text-decoration:none" style-hover="background:#9C3D10;color:#FFF6E8">Donate {{ donateLabel }}</a>
+          <div style="font-size:13px;color:#6E5C4F;margin-top:16px;line-height:1.6">Donations are processed separately from store orders. You will receive a tax-deductible receipt by email. ABN 74154403086.</div>
+        </div>
+        <div>
+          <h2 style="font-size:30px;margin:0 0 20px">Other ways to donate</h2>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <sc-for list="{{ giveWays }}" as="g" hint-placeholder-count="4">
+              <a href="#" style="text-decoration:none;color:#17130F;background:#F4E8E0;padding:22px;display:flex;flex-direction:column;gap:7px" style-hover="background:#EFDCD0">
+                <span style="font-size:19px">{{ g.title }}</span>
+                <span style="font-size:15px;color:#6E5C4F;line-height:1.55">{{ g.body }}</span>
+              </a>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+
+  <!-- ===================== CONTACT ===================== -->
+  <sc-if value="{{ pg.contact }}">
+    <div style="max-width:1280px;margin:0 auto;padding:64px 24px 0">
+      <h1 style="font-size:clamp(32px,5vw,52px);margin:0 0 18px">Contact Us</h1>
+      <p style="font-size:18px;line-height:1.65;max-width:56ch;color:#4A3B31;margin:0 0 44px;text-wrap:pretty">Questions about an order, a resource, or working with us? We'd love to hear from you.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:52px;align-items:start">
+        <form style="display:flex;flex-direction:column;gap:18px">
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:15px">Your name<input type="text" style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px" /></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:15px">Email address<input type="email" style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px" /></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:15px">What is this about?<select style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px"><option>An order</option><option>Learning resources</option><option>Wholesale &amp; bulk orders</option><option>Media</option><option>Something else</option></select></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:15px">Message<textarea rows="6" style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px;resize:vertical"></textarea></label>
+          <button type="button" style="align-self:flex-start;background:#17130F;color:#EDC71D;border:0;padding:15px 32px;border-radius:999px;font-size:16px;cursor:pointer">Send message</button>
+        </form>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ offices }}" as="o" hint-placeholder-count="3">
+            <div style="background:#F4E8E0;padding:24px">
+              <div style="font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#9C3D10;margin-bottom:10px">{{ o.region }}</div>
+              <div style="font-size:17px;line-height:1.6;color:#3A2E24">{{ o.detail }}</div>
+            </div>
+          </sc-for>
+          <div style="background:#17130F;color:#FBF6F1;padding:24px;font-size:16px;line-height:1.6">Store enquiries: <a href="#" style="color:#EDC71D">store@childrensground.org.au</a></div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===================== GALLERY ===================== -->
+  <sc-if value="{{ pg.gallery }}">
+    <div>
+      <section style="background:#17130F;color:#FBF6F1">
+        <div style="max-width:1280px;margin:0 auto;padding:64px 24px">
+          <div style="font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#EDC71D;margin-bottom:18px">Ampe-kenhe Art</div>
+          <h1 style="font-size:clamp(34px,5vw,56px);margin:0 0 18px">Gallery</h1>
+          <p style="font-size:18px;line-height:1.65;max-width:60ch;color:#E4D8CC;margin:0;text-wrap:pretty">Artwork by First Nations children and adults from the communities we work with. Every work is shared with the permission of the artist and their family, and artist royalties are paid on every sale.</p>
+        </div>
+      </section>
+      <section style="max-width:1280px;margin:0 auto;padding:48px 24px 0">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px">
+          <sc-for list="{{ galleryFilters }}" as="g" hint-placeholder-count="4">
+            <button type="button" onClick="{{ g.pick }}" style="{{ g.style }}">{{ g.name }}</button>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:26px">
+          <sc-for list="{{ galleryItems }}" as="w" hint-placeholder-count="6">
+            <figure style="margin:0;border:1px solid #E3D5C9;display:flex;flex-direction:column">
+              <sc-if value="{{ w.img }}">
+                <div role="img" aria-label="{{ w.alt }}" style="width:100%;aspect-ratio:1/1;background-image:url({{ w.img }});background-size:cover;background-position:center;background-color:#EFE2D7"></div>
+              </sc-if>
+              <sc-if value="{{ w.noImg }}">
+                <div style="width:100%;aspect-ratio:1/1;background:repeating-linear-gradient(135deg,#F1E6DC 0 9px,#E9DBCE 9px 18px);display:grid;place-items:center;padding:16px;text-align:center"><span style="font:500 10px/1.6 ui-monospace,Menlo,monospace;letter-spacing:.1em;color:#8A6A55;text-transform:uppercase">{{ w.ph }}</span></div>
+              </sc-if>
+
+            </figure>
+          </sc-for>
+        </div>
+        <div style="margin-top:56px;background:#F4E8E0;padding:36px 32px;text-align:center">
+          <p style="font-size:clamp(18px,2.2vw,24px);font-weight:300;line-height:1.5;max-width:56ch;margin:0 auto 8px;text-wrap:pretty">Artwork, language and stories remain the cultural and intellectual property of the artists and communities they come from.</p>
+          <a href="#" onClick="{{ goContact }}" style="font-size:16px;border-bottom:1px solid #9C3D10;padding-bottom:2px">Ask about licensing or exhibitions →</a>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+
+  <!-- ===================== WHOLESALE / B2B ===================== -->
+  <sc-if value="{{ pg.wholesale }}">
+    <div>
+      <section style="background:#17130F;color:#FBF6F1">
+        <div style="max-width:1280px;margin:0 auto;padding:64px 24px">
+          <div style="font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#EDC71D;margin-bottom:18px">For schools, libraries, galleries &amp; retailers</div>
+          <h1 style="font-size:clamp(34px,5vw,56px);margin:0 0 18px">Wholesale &amp; B2B</h1>
+          <p style="font-size:18px;line-height:1.65;max-width:60ch;color:#E4D8CC;margin:0;text-wrap:pretty">Stock First Nations-made books, language resources and merchandise. Trade pricing, invoicing and bulk classroom sets — with artist royalties paid on every unit, at every price tier.</p>
+        </div>
+      </section>
+
+      <section style="max-width:1280px;margin:0 auto;padding:56px 24px 0">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px">
+          <sc-for list="{{ wsSegments }}" as="w" hint-placeholder-count="3">
+            <div style="background:#F4E8E0;padding:26px;display:flex;flex-direction:column;gap:10px">
+              <span style="font-size:20px">{{ w.title }}</span>
+              <span style="font-size:15px;color:#6E5C4F;line-height:1.6">{{ w.body }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="max-width:1280px;margin:0 auto;padding:64px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:52px;align-items:start">
+        <div>
+          <h2 style="font-size:30px;margin:0 0 18px">Partner with Us</h2>
+          <p style="font-size:17px;line-height:1.75;color:#4A3B31;margin:0 0 26px;max-width:56ch;text-wrap:pretty">[Copy to be supplied by Children's Ground — about becoming a wholesale stockist and working with First Nations enterprise]</p>
+          <a href="#" style="display:inline-block;background:#17130F;color:#EDC71D;padding:15px 30px;border-radius:999px;font-size:16px;text-decoration:none" style-hover="background:#9C3D10;color:#FFF6E8">Trade Login</a>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E3D5C9;padding:32px">
+          <h2 style="font-size:24px;margin:0 0 8px">Register for a trade account</h2>
+          <p style="font-size:15px;color:#6E5C4F;line-height:1.6;margin:0 0 22px">We reply within two business days with trade pricing and a catalogue.</p>
+          <form style="display:flex;flex-direction:column;gap:16px">
+            <input type="text" placeholder="Organisation name" style="border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px" />
+            <input type="text" placeholder="Contact name" style="border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px" />
+            <input type="email" placeholder="Email address" style="border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px" />
+            <input type="text" placeholder="ABN" style="border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px" />
+            <select style="border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px;color:#17130F"><option>Organisation type</option><option>School or early learning</option><option>Library</option><option>Gallery or museum shop</option><option>Retailer</option><option>Corporate gifting</option><option>Other</option></select>
+            <textarea rows="3" placeholder="What are you interested in stocking?" style="border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px;resize:vertical"></textarea>
+            <button type="button" style="background:#17130F;color:#EDC71D;border:0;padding:16px;border-radius:999px;font-size:16px;cursor:pointer" style-hover="background:#9C3D10;color:#FFF6E8">Request trade access</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+
+  <!-- ===================== POLICY PAGES ===================== -->
+  <sc-if value="{{ pg.policy }}">
+    <div style="max-width:1100px;margin:0 auto;padding:64px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:52px;align-items:start">
+      <aside>
+        <div style="font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#8A6A55;margin-bottom:16px">Store information</div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ policyNav }}" as="p" hint-placeholder-count="3">
+            <a href="#" onClick="{{ p.open }}" style="{{ p.style }}">{{ p.name }}</a>
+          </sc-for>
+        </div>
+      </aside>
+      <article style="grid-column:span 2;min-width:0">
+        <h1 style="font-size:clamp(30px,4.4vw,46px);margin:0 0 26px">{{ policy.title }}</h1>
+        <div style="font-size:14px;color:#6E5C4F;margin-bottom:32px">Last updated {{ policy.updated }}</div>
+        <sc-for list="{{ policy.body }}" as="b" hint-placeholder-count="4">
+          <div style="margin-bottom:30px">
+            <h2 style="font-size:22px;margin:0 0 12px">{{ b.h }}</h2>
+            <p style="font-size:17px;line-height:1.75;color:#3A2E24;margin:0;max-width:68ch;text-wrap:pretty">{{ b.p }}</p>
+          </div>
+        </sc-for>
+      </article>
+    </div>
+  </sc-if>
+
+  <!-- ===================== CART ===================== -->
+  <sc-if value="{{ pg.cart }}">
+    <div style="max-width:1180px;margin:0 auto;padding:64px 24px 0">
+      <h1 style="font-size:clamp(30px,4.4vw,46px);margin:0 0 34px">Your cart</h1>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:48px;align-items:start">
+        <div style="grid-column:span 2;min-width:0;border-top:1px solid #E3D5C9">
+          <sc-for list="{{ cartItems }}" as="i" hint-placeholder-count="2">
+            <div style="display:flex;gap:20px;padding:24px 0;border-bottom:1px solid #E3D5C9;flex-wrap:wrap">
+              <div role="img" aria-label="{{ i.alt }}" style="width:110px;height:110px;flex:none;background-image:url({{ i.img }});background-size:cover;background-position:center;background-color:#EFE2D7;border:1px solid #E3D5C9"></div>
+              <div style="flex:1;min-width:180px">
+                <div style="font-size:18px;margin-bottom:6px">{{ i.title }}</div>
+                <div style="font-size:14px;color:#6E5C4F;margin-bottom:12px">{{ i.variant }}</div>
+                <a href="#" style="font-size:14px">Remove</a>
+              </div>
+              <div style="font-size:17px">{{ i.line }}</div>
+            </div>
+          </sc-for>
+          <div style="padding:22px 0;font-size:16px;color:#4A3B31">Your free 2026 <em style="font-style:normal">Ampe-kenhe Art</em> calendar has been added to this order.</div>
+        </div>
+        <aside style="background:#F4E8E0;padding:28px">
+          <div style="font-size:19px;margin-bottom:20px">Order summary</div>
+          <div style="display:flex;justify-content:space-between;font-size:16px;margin-bottom:12px"><span>Subtotal</span><span>AU$95.00</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:16px;margin-bottom:12px;color:#4A3B31"><span>Shipping</span><span>Calculated at checkout</span></div>
+          <div style="border-top:1px solid #D9C6B7;margin:18px 0;padding-top:18px;display:flex;justify-content:space-between;font-size:20px"><span>Total</span><span>AU$95.00</span></div>
+          <label style="display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.5;background:#FBF6F1;padding:14px;margin-bottom:18px"><input type="checkbox" style="margin-top:3px" /> Add a $10 donation to Children's Ground</label>
+          <a href="#" onClick="{{ goCheckout }}" style="display:block;text-align:center;background:#17130F;color:#EDC71D;padding:16px;border-radius:999px;font-size:16px;text-decoration:none">Checkout</a>
+          <a href="#" onClick="{{ goShop }}" style="display:block;text-align:center;margin-top:14px;font-size:15px">Continue shopping</a>
+        </aside>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===================== CHECKOUT ===================== -->
+  <sc-if value="{{ pg.checkout }}">
+    <div style="max-width:1080px;margin:0 auto;padding:64px 24px 0">
+      <h1 style="font-size:clamp(28px,4vw,40px);margin:0 0 34px">Checkout</h1>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:48px;align-items:start">
+        <form style="display:flex;flex-direction:column;gap:18px">
+          <div style="font-size:19px">Contact</div>
+          <input type="email" placeholder="Email address" style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px" />
+          <div style="font-size:19px;margin-top:14px">Delivery</div>
+          <input type="text" placeholder="Full name" style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px" />
+          <input type="text" placeholder="Street address" style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px" />
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:14px">
+            <input type="text" placeholder="Suburb" style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px" />
+            <input type="text" placeholder="State" style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px" />
+            <input type="text" placeholder="Postcode" style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px" />
+          </div>
+          <div style="font-size:19px;margin-top:14px">Payment</div>
+          <input type="text" placeholder="Card number" style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px" />
+          <button type="button" onClick="{{ goConfirm }}" style="background:#17130F;color:#EDC71D;border:0;padding:17px;border-radius:999px;font-size:17px;cursor:pointer;margin-top:10px">Pay now</button>
+        </form>
+        <aside style="background:#F4E8E0;padding:28px">
+          <div style="font-size:19px;margin-bottom:20px">Order summary</div>
+          <sc-for list="{{ cartItems }}" as="i" hint-placeholder-count="2">
+            <div style="display:flex;justify-content:space-between;gap:16px;font-size:16px;margin-bottom:12px"><span>{{ i.title }}</span><span>{{ i.line }}</span></div>
+          </sc-for>
+          <div style="display:flex;justify-content:space-between;font-size:16px;margin-bottom:12px;color:#4A3B31"><span>Shipping</span><span>AU$9.50</span></div>
+          <div style="border-top:1px solid #D9C6B7;margin:18px 0;padding-top:18px;display:flex;justify-content:space-between;font-size:20px"><span>Total</span><span>AU$104.50</span></div>
+          <div style="font-size:14px;line-height:1.6;color:#4A3B31">All profits go back to the artists and to Children's Ground.</div>
+        </aside>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===================== ORDER CONFIRMATION ===================== -->
+  <sc-if value="{{ pg.confirm }}">
+    <div style="max-width:760px;margin:0 auto;padding:80px 24px 0;text-align:center">
+      <img src="assets/cg-logo-v2.svg" alt="" style="width:76px;height:auto;margin:0 auto 26px;display:block" />
+      <h1 style="font-size:clamp(30px,4.4vw,46px);margin:0 0 18px">Thank you — your order is confirmed</h1>
+      <p style="font-size:19px;line-height:1.65;color:#4A3B31;margin:0 0 34px;text-wrap:pretty">Order <strong style="font-weight:500">#CG-10482</strong>. A receipt is on its way to your email. Your purchase supports First Nations artists, families and communities.</p>
+      <div style="background:#F4E8E0;padding:30px;text-align:left;margin-bottom:30px">
+        <div style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#9C3D10;margin-bottom:16px">What happens next</div>
+        <div style="display:flex;flex-direction:column;gap:12px;font-size:17px;line-height:1.6;color:#3A2E24">
+          <span>We pack your order in Mparntwe within 2–3 business days.</span>
+          <span>Tracking is emailed as soon as it ships.</span>
+          <span>Your free 2026 Ampe-kenhe Art calendar is included.</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <a href="#" onClick="{{ goShop }}" style="background:#17130F;color:#EDC71D;padding:15px 30px;border-radius:999px;text-decoration:none;font-size:16px">Keep shopping</a>
+        <a href="#" onClick="{{ goAccount }}" style="border:1px solid #C9B7A7;color:#17130F;padding:15px 30px;border-radius:999px;text-decoration:none;font-size:16px">View your account</a>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===================== SEARCH ===================== -->
+  <sc-if value="{{ pg.search }}">
+    <div style="max-width:1180px;margin:0 auto;padding:56px 24px 0">
+      <input type="search" value="{{ q }}" onChange="{{ setQ }}" placeholder="Search the store" aria-label="Search the store" style="width:100%;border:0;border-bottom:2px solid #17130F;background:none;padding:16px 0;font-size:clamp(24px,3.4vw,34px);font-weight:300;color:#17130F;margin-bottom:16px;outline:none" />
+      <div style="font-size:16px;color:#6E5C4F;margin-bottom:38px">{{ searchCount }} results for &ldquo;{{ q }}&rdquo;</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:26px 24px">
+        <sc-for list="{{ searchResults }}" as="p" hint-placeholder-count="4">
+          <a href="#" onClick="{{ p.open }}" style="text-decoration:none;color:#17130F;display:block">
+            <div role="img" aria-label="{{ p.alt }}" style="width:100%;aspect-ratio:1/1;background-image:url({{ p.img }});background-size:cover;background-position:center;background-color:#EFE2D7;border:1px solid #E3D5C9"></div>
+            <div style="font-size:17px;line-height:1.35;margin:12px 0 5px">{{ p.title }}</div>
+            <div style="font-size:16px;color:#4A3B31">{{ p.price }}</div>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===================== LOGIN / REGISTER ===================== -->
+  <sc-if value="{{ pg.login }}">
+    <div style="max-width:980px;margin:0 auto;padding:64px 24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:48px;align-items:start">
+      <div>
+        <h1 style="font-size:34px;margin:0 0 22px">Log in</h1>
+        <form style="display:flex;flex-direction:column;gap:16px">
+          <input type="email" placeholder="Email address" style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px" />
+          <input type="password" placeholder="Password" style="border:1px solid #C9B7A7;background:#FFFFFF;padding:14px;font-size:16px" />
+          <button type="button" onClick="{{ goAccount }}" style="background:#17130F;color:#EDC71D;border:0;padding:15px;border-radius:999px;font-size:16px;cursor:pointer">Log in</button>
+          <a href="#" style="font-size:15px">Forgot your password?</a>
+        </form>
+      </div>
+      <div style="background:#F4E8E0;padding:32px">
+        <h2 style="font-size:28px;margin:0 0 16px">Create an account</h2>
+        <p style="font-size:16px;line-height:1.65;color:#4A3B31;margin:0 0 22px">Track your orders, save resources for your classroom, and hear our stories first.</p>
+        <form style="display:flex;flex-direction:column;gap:16px">
+          <input type="text" placeholder="First name" style="border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px" />
+          <input type="text" placeholder="Last name" style="border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px" />
+          <input type="email" placeholder="Email address" style="border:1px solid #C9B7A7;background:#FBF6F1;padding:14px;font-size:16px" />
+          <button type="button" onClick="{{ goAccount }}" style="background:#9C3D10;color:#FFF6E8;border:0;padding:15px;border-radius:999px;font-size:16px;cursor:pointer">Register</button>
+        </form>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===================== ACCOUNT ===================== -->
+  <sc-if value="{{ pg.account }}">
+    <div style="max-width:1100px;margin:0 auto;padding:64px 24px 0">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:38px">
+        <h1 style="font-size:clamp(30px,4.4vw,44px);margin:0">Kele, Anna</h1>
+        <a href="#" onClick="{{ goLogin }}" style="font-size:15px">Log out</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:44px;align-items:start">
+        <aside style="display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ accountNav }}" as="n" hint-placeholder-count="4">
+            <a href="#" style="{{ n.style }}">{{ n.name }}</a>
+          </sc-for>
+        </aside>
+        <div style="grid-column:span 2;min-width:0">
+          <h2 style="font-size:24px;margin:0 0 20px">Recent orders</h2>
+          <div style="border-top:1px solid #E3D5C9">
+            <sc-for list="{{ orders }}" as="o" hint-placeholder-count="3">
+              <div style="display:flex;gap:18px;justify-content:space-between;flex-wrap:wrap;padding:20px 0;border-bottom:1px solid #E3D5C9">
+                <div>
+                  <div style="font-size:17px;margin-bottom:5px">{{ o.id }}</div>
+                  <div style="font-size:15px;color:#6E5C4F">{{ o.date }} · {{ o.items }}</div>
+                </div>
+                <div style="display:flex;gap:22px;align-items:center">
+                  <span style="font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#9C3D10">{{ o.status }}</span>
+                  <span style="font-size:17px">{{ o.total }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#F4E8E0;padding:26px;margin-top:34px;display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap;align-items:center">
+            <div style="font-size:17px;line-height:1.6;max-width:44ch">You have donated <strong style="font-weight:500">AU$150</strong> to Children's Ground this year. Donations over $2 are tax deductible.</div>
+            <a href="#" onClick="{{ goDonate }}" style="background:#17130F;color:#EDC71D;padding:14px 26px;border-radius:999px;text-decoration:none;font-size:15px">Donate again</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer style="margin-top:96px;background:#17130F;color:#E4D8CC">
+    <div style="max-width:1280px;margin:0 auto;padding:64px 24px 40px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:48px;padding-bottom:48px;border-bottom:1px solid #3A2E24">
+        <div>
+          <img src="assets/cg-mark.svg" alt="Children's Ground" style="width:60px;height:auto;display:block;margin-bottom:22px" />
+          <p style="font-size:17px;line-height:1.65;color:#FBF6F1;margin:0 0 18px;font-weight:400;text-wrap:pretty">Children's Ground acknowledges and honours First Nations peoples, paying respect to Elders past and present as custodians of this land. Sovereignty was never ceded.</p>
+          <p style="font-size:15px;line-height:1.7;color:#BFB0A2;margin:0;text-wrap:pretty">In Melbourne, we work on the land of the Wurundjeri People of the Kulin Nation. In Central Australia, we work on the land of the Arrernte People. In the Top End of the Northern Territory, we work on the land of the Bolmo People. In Darwin, we work on the land of the Larrakia people.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:32px">
+          <div>
+            <div style="font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#EDC71D;margin-bottom:16px">Shop</div>
+            <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+              <a href="#" onClick="{{ goShop }}" style="color:#E4D8CC">All products</a>
+              <sc-for list="{{ collections }}" as="c" hint-placeholder-count="4">
+                <a href="#" onClick="{{ c.open }}" style="color:#E4D8CC">{{ c.name }}</a>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#EDC71D;margin-bottom:16px">Children's Ground</div>
+            <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+              <a href="#" onClick="{{ goAbout }}" style="color:#E4D8CC">About us</a>
+              <a href="#" onClick="{{ goGallery }}" style="color:#E4D8CC">Gallery</a>
+              <a href="#" onClick="{{ goDonate }}" style="color:#E4D8CC">Donate</a>
+              <a href="#" onClick="{{ goInvolved }}" style="color:#E4D8CC">Get Involved</a>
+              <a href="#" onClick="{{ goWholesale }}" style="color:#E4D8CC">Wholesale &amp; B2B</a>
+              <a href="#" onClick="{{ goContact }}" style="color:#E4D8CC">Contact Us</a>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#EDC71D;margin-bottom:16px">Help</div>
+            <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+              <a href="#" onClick="{{ goShipping }}" style="color:#E4D8CC">Shipping &amp; Returns</a>
+              <a href="#" onClick="{{ goAccount }}" style="color:#E4D8CC">Your account</a>
+              <a href="#" onClick="{{ goPrivacy }}" style="color:#E4D8CC">Privacy Policy</a>
+              <a href="#" onClick="{{ goTerms }}" style="color:#E4D8CC">Terms &amp; Conditions</a>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:22px;font-weight:300;color:#FBF6F1;margin-bottom:16px">Subscribe to hear our stories</div>
+          <form style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+            <input type="text" placeholder="First name" aria-label="First name" style="border:1px solid #4A3B31;background:#221B15;color:#FBF6F1;padding:13px;font-size:15px" />
+            <input type="email" placeholder="Email address" aria-label="Email address" style="border:1px solid #4A3B31;background:#221B15;color:#FBF6F1;padding:13px;font-size:15px" />
+            <button type="button" style="background:#EDC71D;color:#17130F;border:0;padding:14px;border-radius:999px;font-size:15px;cursor:pointer;align-self:flex-start;padding-left:30px;padding-right:30px">Subscribe</button>
+          </form>
+          <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:15px">
+            <a href="https://www.instagram.com/childrensground/" style="color:#E4D8CC">Instagram</a>
+            <a href="https://www.facebook.com/childrensgroundau" style="color:#E4D8CC">Facebook</a>
+            <a href="https://www.linkedin.com/company/children's-ground-limited/" style="color:#E4D8CC">LinkedIn</a>
+            <a href="https://www.youtube.com/channel/UCxXVzjfd28t3-gotPXV4qFQ" style="color:#E4D8CC">YouTube</a>
+          </div>
+        </div>
+      </div>
+      <div style="padding-top:32px;display:flex;gap:24px;justify-content:space-between;flex-wrap:wrap;font-size:15px;color:#BFB0A2">
+        <div style="display:flex;gap:24px;flex-wrap:wrap">
+          <span style="color:#FBF6F1">Donations over $2 are tax deductible</span>
+          <span>ABN 74154403086</span>
+        </div>
+        <span>© 2026 Children's Ground Ltd. All Rights Reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== PROTOTYPE PAGE SWITCHER ===================== -->
+  <div style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(23,19,15,.94);backdrop-filter:blur(6px);border-top:1px solid #3A2E24;padding:9px 14px;display:flex;gap:8px;align-items:center;overflow-x:auto">
+    <span style="font:500 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:#8A7565;text-transform:uppercase;flex:none;padding-right:6px">Screens</span>
+    <sc-for list="{{ screens }}" as="s" hint-placeholder-count="6">
+      <button type="button" onClick="{{ s.open }}" style="{{ s.style }}">{{ s.name }}</button>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1000},&quot;typeface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Poppins&quot;,&quot;Jost&quot;,&quot;Figtree&quot;],&quot;default&quot;:&quot;Poppins&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Typography&quot;},&quot;headingWeight&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;400&quot;,&quot;500&quot;,&quot;600&quot;,&quot;700&quot;],&quot;default&quot;:&quot;600&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Typography&quot;},&quot;displayFont&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Titan One&quot;,&quot;Luckiest Guy&quot;,&quot;Bowlby One SC&quot;],&quot;default&quot;:&quot;Titan One&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Typography&quot;}}">
+const PRODUCTS = [
+  {id:'birds-book', title:'Ayeye Thipe-Akerte — Arrernte Birds', collection:'Learning Resources', sub:'Books', price:'AU$30.00', tag:'New', ph:'Book cover — Arrernte Birds', alt:'Cover of Ayeye Thipe-Akerte, illustrated by Arrernte children', desc:'A bilingual Arrernte and English book about the birds of Central Australia, written and illustrated by Arrernte children and Elders at Children\u2019s Ground.'},
+  {id:'birds-flash', title:'Flashcards: Ayeye Thipe-Akerte — About Birds (set of 33)', collection:'Learning Resources', sub:'Flashcards', price:'AU$35.00', tag:'New', ph:'Flashcard set — birds', alt:'Set of 33 illustrated Arrernte bird flashcards', desc:'Thirty-three double-sided cards pairing Arrernte and English bird names with children\u2019s artwork. Made for classrooms, families and language learners.'},
+  {id:'lahne', title:'Lahne Araye — Look There', collection:'Learning Resources', sub:'Books', price:'AU$25.00', ph:'Book cover — Lahne Araye', alt:'Cover of Lahne Araye, Look There', desc:'A first-words picture book in Arrernte and English, created by children in Mparntwe.'},
+  {id:'lang-kit', title:'Arrernte Language Learning Kit', collection:'Learning Resources', sub:'Digital Resources', price:'AU$95.00', ph:'Language kit — box contents', alt:'Arrernte language learning kit with book, cards and poster', desc:'A complete classroom kit: two books, a flashcard set, a wall poster and a teaching guide developed with Arrernte educators.'},
+  {id:'puzzle', title:'Puzzle: Thipe (Birds), 500 pieces', collection:'Learning Resources', sub:'Posters', price:'AU$40.00', ph:'Puzzle box — Thipe artwork', alt:'500-piece puzzle featuring Thipe artwork', desc:'A 500-piece puzzle featuring artwork by young artists at Children\u2019s Ground.'},
+  {id:'cards6', title:'Greeting Cards: Ampe-kenhe Art 2026 (bundle of 6)', collection:'Merchandise', sub:'Greeting Cards', price:'AU$20.00', tag:'Sold out', ph:'Greeting card bundle', alt:'Bundle of six greeting cards featuring children\u2019s artwork', desc:'Six blank cards with envelopes, each featuring a different work from the 2026 Ampe-kenhe Art collection.'},
+  {id:'cal', title:'Calendar: Ampe-kenhe Art 2026', collection:'Merchandise', sub:'Calendars', price:'FREE with any store item', ph:'2026 wall calendar', alt:'2026 wall calendar featuring children\u2019s artwork', desc:'A twelve-month wall calendar of artwork by children across our communities. Free with any store purchase.'},
+  {id:'tote', title:'Tote Bag: Ampe-kenhe Art', collection:'Merchandise', sub:'Bags', price:'AU$25.00', ph:'Canvas tote bag', alt:'Natural canvas tote bag printed with children\u2019s artwork', desc:'Heavy natural canvas, printed in Australia with artwork by young artists.'},
+  {id:'music', title:'Album: Ampe-kenhe Ahelhe Songs', collection:'Learning Resources', sub:'Music', price:'AU$20.00', ph:'CD album artwork', alt:'Album cover for Ampe-kenhe Ahelhe Songs', desc:'Songs in Arrernte recorded with children, families and Elders on country.'},
+  {id:'tee', title:'Wear it Yellow T-Shirt', collection:'Clothing', sub:'T-Shirts', price:'AU$45.00', ph:'Yellow t-shirt — flat lay', alt:'Yellow t-shirt with Children\u2019s Ground logo', desc:'Our Wear it Yellow tee, worn each year to stand with First Nations children and their right to learn in their own language and culture.'},
+  {id:'cap', title:'Children\u2019s Ground Cap', collection:'Clothing', sub:'Caps', price:'AU$35.00', tag:'Sold out', ph:'Cap — front view', alt:'Black cap with embroidered Children\u2019s Ground logo', desc:'Embroidered cotton cap with the Children\u2019s Ground mark.'},
+  {id:'tee-birds', title:'T-Shirt: Thipe (Birds)', collection:'Clothing', sub:'T-Shirts', price:'AU$45.00', ph:'T-shirt — Thipe print', alt:'Cotton t-shirt printed with Thipe bird artwork', desc:'Organic cotton tee printed with Thipe artwork by artists in Mparntwe.'},
+  {id:'print', title:'Digital Art Print: Arrernte Country', collection:'Art', sub:'Digital Art Prints', price:'AU$80.00', ph:'Framed art print', alt:'Giclée print of artwork depicting Arrernte country', desc:'Archival giclée print on cotton rag, released in a numbered edition. Artist royalties are paid on every sale.'},
+  {id:'orig', title:'Original Work on Paper', collection:'Art', sub:'Original Artworks', price:'AU$450.00', ph:'Original work on paper', alt:'Original painted work on paper', desc:'A one-off work on paper. Each piece comes with the artist\u2019s name, community and story.'},
+  {id:'artcards', title:'Art Cards: Ampe-kenhe Collection (set of 10)', collection:'Art', sub:'Greeting Cards', opts:['Set of 10'], price:'AU$28.00', ph:'Art card set', alt:'Set of ten art cards featuring community artwork', desc:'Ten small-format art cards, suitable for framing.'},
+  {id:'giftcard', title:'Digital Gift Card', collection:'Merchandise', sub:'Gift Cards', price:'from AU$25.00', ph:'Digital gift card', alt:'Children\u2019s Ground digital gift card', desc:'Delivered by email, redeemable across the whole store.'}
+];
+
+const COLLECTIONS = [
+  {name:'Learning Resources', blurb:'Books, Flash Cards and Language resources made by First Nations artists and educators', ph:'Collection — learning resources', subs:['Books','Flashcards','Language Learning Resources','Puzzles']},
+  {name:'Merchandise', blurb:'Totes, cards, calendars and music from our communities.', ph:'Collection — merchandise', subs:['Tote Bags','Greeting Cards','Calendars','Stickers','Music','Gift Cards']},
+  {name:'Clothing', blurb:'Community-designed prints on Tees', ph:'Collection — clothing', subs:['T-Shirts','Wear it Yellow','Accessories']},
+  {name:'Art', blurb:'Prints, originals and art cards — artist royalties on every sale.', ph:'Collection — art', subs:['Digital Art Prints','Original Artwork','Art Cards']}
+];
+
+const PHOTO = {
+  'birds-book': ['assets/img/web/books-easels.jpg', 'Ayeye Thipe-Akerte and other Children\u2019s Ground books on display easels at the store stall'],
+  'birds-flash': ['assets/img/web/market-stall.jpg', 'Arrernte language flashcards laid out on the Children\u2019s Ground stall in Todd Mall'],
+  'lahne': ['assets/img/web/shop-shelves.jpg', 'Children\u2019s Ground books and language resources on the store shelves'],
+  'lang-kit': ['assets/img/web/books-whiteboard.jpg', 'Language books and learning resources set up at Children\u2019s Ground'],
+  'puzzle': ['assets/img/web/products-table.jpg', 'Emu puzzles, art cards and books displayed beneath community artwork'],
+  'cards6': ['assets/img/web/conference-stall.jpg', 'Greeting cards and books on the Children\u2019s Ground stall'],
+  'cal': ['assets/img/web/booth-earrings.jpg', 'The Children\u2019s Ground stand with community artwork, resources and a store price list'],
+  'tote': ['assets/img/web/clothing-room.jpg', 'Printed tote bags and tea towels hanging at the Children\u2019s Ground store'],
+  'music': ['assets/img/web/stall-red-ochre-2.jpg', 'Books, cards and resources on the Children\u2019s Ground stall in Todd Mall'],
+  'tee': ['assets/img/web/marquee-yellow-tee.jpg', 'Wear it Yellow t-shirt on the rack under the Children\u2019s Ground marquee'],
+  'cap': ['assets/img/web/todd-mall-banner.jpg', 'Caps and t-shirts on the rack beside the Arrernte-kenhe Angkentye banner'],
+  'tee-birds': ['assets/img/web/team-desk.jpg', 'Children\u2019s Ground tea towels and printed artwork behind the store desk'],
+  'print': ['assets/img/web/prints-shoes.jpg', 'Art prints and hand-painted shoes laid out on the table'],
+  'orig': ['assets/img/web/art-canvases.jpg', 'Original painted canvases and mirrors laid out for the store'],
+  'artcards': ['assets/img/web/ceramics-plates.jpg', 'Hand-made ceramic plates and tiles by community artists'],
+  'giftcard': ['assets/img/web/jewellery-stall.jpg', 'Hand-made seed jewellery by community artists on the Children\u2019s Ground stall']
+};
+PRODUCTS.forEach((p) => {
+  const ph = PHOTO[p.id];
+  if (ph) { p.img = ph[0]; p.alt = ph[1]; }
+});
+const COLL_IMG = [
+  {img:'assets/img/web/shop-shelves.jpg', alt:'Books and language resources on the Children\u2019s Ground store shelves'},
+  {img:'assets/img/web/products-table.jpg', alt:'Puzzles, art cards, tote bags and books displayed beneath community artwork'},
+  {img:'assets/img/web/clothing-room.jpg', alt:'Printed tea towels, tote bags and t-shirts at the Children\u2019s Ground store'},
+  {img:'assets/img/web/art-canvases.jpg', alt:'Original painted canvases and mirrors by community artists'}
+];
+COLLECTIONS.forEach((c, i) => { c.img = COLL_IMG[i].img; c.imgAlt = COLL_IMG[i].alt; });
+
+const POLICIES = {
+  shipping: {title:'Shipping & Returns', updated:'July 2026', body:[
+    {h:'Where we ship', p:'We post Australia-wide from Mparntwe (Alice Springs) and ship internationally on request. Flat-rate domestic postage is AU$9.50, or free on orders over AU$150.'},
+    {h:'How long it takes', p:'Orders are packed within 2–3 business days. Delivery to metropolitan areas usually takes 3–7 business days; remote and Territory addresses can take longer, particularly through the wet season.'},
+    {h:'Returns', p:'If something arrives damaged or is not what you ordered, contact us within 30 days and we will replace it or refund you in full. Unused items in original condition can be returned within 30 days; return postage is at your cost.'},
+    {h:'Original artwork', p:'Original works are shipped flat or rolled with insurance and tracking. We will contact you to confirm delivery arrangements before dispatch.'}
+  ]},
+  privacy: {title:'Privacy Policy', updated:'July 2026', body:[
+    {h:'What we collect', p:'We collect only what we need to fulfil your order and, where you have asked for it, to send you our stories: your name, contact details, delivery address and order history.'},
+    {h:'How we use it', p:'Your information is used to process orders, issue tax-deductible receipts for donations, and respond to your enquiries. We do not sell or rent personal information to third parties.'},
+    {h:'Cultural material', p:'Stories, artwork and language published in this store remain the cultural and intellectual property of the artists, families and communities they come from. Permission is sought and recorded for every work we publish.'},
+    {h:'Your choices', p:'You can ask us at any time to see, correct or delete the information we hold about you, or to unsubscribe from our mailing list.'}
+  ]},
+  terms: {title:'Terms & Conditions', updated:'July 2026', body:[
+    {h:'About this store', p:'This store is operated by Children\u2019s Ground Ltd (ABN 74154403086), a registered charity. All prices are in Australian dollars and include GST where applicable.'},
+    {h:'Where your money goes', p:'All profits go back to the artists and to Children\u2019s Ground, to support these families and further their enterprise and resource development projects.'},
+    {h:'Cultural and intellectual property', p:'Artwork, language and stories in our products are used with the permission of the artists and communities who hold them. They may not be reproduced, adapted or used commercially without written permission.'},
+    {h:'Donations', p:'Donations are separate from store purchases. Donations over $2 are tax deductible and a receipt is issued by email.'}
+  ]}
+};
+
+const SLIDES = [
+  {img:'assets/img/kids/kids-running.jpg', alt:'Children running and laughing on red dirt Country', eyebrow:'The Children\u2019s Ground Store',
+   display:'Made by community', cta:'Shop all products', page:'shop',
+   body:'Books, art, language resources and merchandise \u2014 designed, led and delivered by First Nations communities.'},
+  {img:'assets/img/kids/learning-circle.jpg', alt:'Children sitting together in a learning circle', eyebrow:'Learning resources',
+   display:'Our languages, our books', cta:'Shop learning resources', page:'shop',
+   body:'Bilingual books, flashcards and classroom kits written and illustrated by Arrernte children and Elders.'},
+  {img:'assets/img/web/clothing-room.jpg', alt:'Printed tote bags and tea towels at the Children\u2019s Ground store', eyebrow:'Ampe-kenhe Art 2026',
+   display:'Wear the children\u2019s work', cta:'Shop the collection', page:'shop',
+   body:'Tea towels, totes and tees printed with artwork by young artists. Artist royalties on every sale.'},
+  {img:'assets/img/kids/sunset-feathers.jpg', alt:'Children in ceremonial paint and feather headbands at sunset', eyebrow:'Walk with us',
+   display:'Back a system built by us', cta:'Donate today', page:'donate',
+   body:'Your gift backs First Nations-led learning, health and employment. Donations over $2 are tax deductible.'}
+];
+
+const MARQUEE_A = ['First Nations owned', '\u2022', 'Artist royalties on every sale', '\u2022', 'Free 2026 calendar with every order', '\u2022', 'Ships Australia-wide from Mparntwe', '\u2022'];
+const MARQUEE_B = ['Ingkerrekele Arntarnte-areme', '\u2022', 'Everyone Being Responsible', '\u2022', 'Ampe-kenhe Ahelhe', '\u2022', 'Children\u2019s Ground', '\u2022'];
+
+const NAV = [
+  {name:'Shop All', page:'shop', featured:[{name:'New', page:'shop'}, {name:'Sale', page:'shop'}], subs:[
+    {name:'Collections', page:'shop'},
+    {name:'Learning Resources', coll:'Learning Resources'},
+    {name:'Merchandise', coll:'Merchandise'},
+    {name:'Clothing', coll:'Clothing'},
+    {name:'Art', coll:'Art'}
+  ]},
+  {name:'Learning Resources', coll:'Learning Resources', subs:[
+    {name:'Books', coll:'Learning Resources', sub:'Books'},
+    {name:'Flashcards', coll:'Learning Resources', sub:'Flashcards'},
+    {name:'Posters', coll:'Learning Resources', sub:'Posters'},
+    {name:'Music', coll:'Learning Resources', sub:'Music'},
+    {name:'Digital Resources', coll:'Learning Resources', sub:'Digital Resources'}
+  ]},
+  {name:'Merchandise', coll:'Merchandise', subs:[
+    {name:'Greeting Cards', coll:'Merchandise', sub:'Greeting Cards'},
+    {name:'Calendars', coll:'Merchandise', sub:'Calendars'},
+    {name:'Stickers', coll:'Merchandise', sub:'Stickers'},
+    {name:'Bags', coll:'Merchandise', sub:'Bags'},
+    {name:'Tea Towels', coll:'Merchandise', sub:'Tea Towels'},
+    {name:'Gift Cards', coll:'Merchandise', sub:'Gift Cards'}
+  ]},
+  {name:'Clothing', coll:'Clothing', subs:[
+    {name:'T-Shirts', coll:'Clothing', sub:'T-Shirts'},
+    {name:'Caps', coll:'Clothing', sub:'Caps'},
+    {name:'Accessories', coll:'Clothing', sub:'Accessories'}
+  ]},
+  {name:'Art', coll:'Art', subs:[
+    {name:'Digital Art Prints', coll:'Art', sub:'Digital Art Prints'},
+    {name:'Greeting Cards', coll:'Art', sub:'Greeting Cards'},
+    {name:'Original Artworks', coll:'Art', sub:'Original Artworks'}
+  ]},
+  {name:'Wholesale', page:'wholesale', subs:[
+    {name:'Wholesale Login', page:'wholesale'},
+    {name:'Stock Us', page:'wholesale'},
+    {name:'Contact Us', page:'contact'}
+  ]},
+  {name:'About Us', page:'about', subs:[
+    {name:'Our Story', page:'about'},
+    {name:'Find Us', page:'about'},
+    {name:'Contact Us', page:'contact'}
+  ]}
+];
+
+// PLACEMENT UNCONFIRMED — best guess: secondary/account menu
+const ACCOUNT_MENU = [
+  {name:'Collections', page:'shop'},
+  {name:'Favourites', page:'account'},
+  {name:'Donate', page:'donate'},
+  {name:'About Us', page:'about'},
+  {name:'Find Us \u2014 Stockists & Markets', page:'about'}
+];
+COLLECTIONS.forEach(c => { const n = NAV.find(x => x.name === c.name); if (n) c.subs = n.subs.map(s => s.sub || s.name); });
+
+const VISIT_LOCATIONS = ['Mparntwe - Alice Springs', 'Altarpilta - Plenty Hwy', 'Malkawo - Top End', 'Garramilla - Darwin', 'Naarm - Melbourne'];
+
+const VARIANT_HINT = {
+  'Books': ['Standard', 'Large print', 'Classroom set'],
+  'Flashcards': ['Set of 33', 'Classroom set'],
+  'Language Learning Resources': ['Classroom kit', 'Family kit'],
+  'Puzzles': ['500 pieces', '1000 pieces'],
+  'Tote Bags': ['Natural', 'Black'],
+  'Greeting Cards': ['Bundle of 6', 'Bundle of 12'],
+  'Calendars': ['2026 edition'],
+  'Stickers': ['Single', 'Sheet of 6'],
+  'Music': ['CD', 'Digital'],
+  'Gift Cards': ['$25', '$50', '$100'],
+  'T-Shirts': ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+  'Wear it Yellow': ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+  'Accessories': ['One size'],
+  'Digital Art Prints': ['A3', 'A2', 'A1'],
+  'Original Artwork': ['One of a kind'],
+  'Art Cards': ['Set of 10'],
+  'Bags': ['Natural', 'Black'],
+  'Caps': ['One size'],
+  'Original Artworks': ['One of a kind'],
+  'Posters': ['A3', 'A2'],
+  'Digital Resources': ['Download'],
+  'Tea Towels': ['Single']
+};
+
+const PLACES = [
+  {kind:'Visit us', name:'Mparntwe store', country:'Arrernte Country \u2014 Alice Springs', address:'Children\u2019s Ground, Mparntwe', cta:'Book an appointment',
+   hours:[{day:'Mon \u2013 Tue', time:'Closed'}, {day:'Wed \u2013 Fri', time:'10am \u2013 4pm'}, {day:'Sat', time:'10am \u2013 1pm'}, {day:'Sun & public holidays', time:'Closed'}]},
+  {kind:'Find us', name:'Todd Mall Markets', country:'Arrernte Country \u2014 Alice Springs', address:'Todd Mall, every second Sunday', cta:'Market dates',
+   hours:[{day:'Feb \u2013 Dec', time:'Every 2nd Sunday'}, {day:'Sunday', time:'9am \u2013 1pm'}, {day:'Wholesale & bulk', time:'By enquiry'}]}
+];
+
+const REVIEWS = [
+  {title:'Our classroom finally has books in language', who:'Rachel, primary teacher \u2014 Naarm', body:'We ordered the Arrernte language kit for our Year 3 class. The children recognise their own languages in it, and the teaching guide made it easy for me to use properly.'},
+  {title:'Beautiful work, and the money goes where it should', who:'Dan \u2014 Garramilla', body:'Bought three tea towels and a puzzle as gifts. The artwork is stunning and everyone asked where it came from \u2014 which is exactly the point.'},
+  {title:'Ordered from remote and it still arrived quickly', who:'Marlene \u2014 Central Australia', body:'Packed carefully, artist credits printed on everything, and the free calendar was a lovely surprise. Will order again for the school.'}
+];
+
+class Component extends DCLogic {
+  state = {page:'home', menu:false, nav:null, accountMenu:false, coll:'Learning Resources', sub:'All', product:'birds-book', amount:50, freq:'once', qty:1, variant:0, cart:2, acc:0, faq:0, policy:'shipping', searchOpen:false, q:'birds', slide:0, tab:'Learning Resources'};
+
+  applyType() {
+    const fam = this.props.typeface || 'Poppins';
+    const w = this.props.headingWeight || 600;
+    document.body.style.fontFamily = "'" + fam + "', system-ui, sans-serif";
+    let el = document.getElementById('cg-type');
+    if (!el) { el = document.createElement('style'); el.id = 'cg-type'; document.head.appendChild(el); }
+    const disp = this.props.displayFont || 'Titan One';
+    el.textContent = 'h1,h2,h3{font-weight:' + w + ';letter-spacing:' + (w >= 600 ? '-.015em' : '-.005em') + '}'
+      + '[data-display]{font-family:"' + disp + '",system-ui,sans-serif;font-weight:400;letter-spacing:.005em;text-transform:uppercase}';
+  }
+  tabStyle(active) {
+    return 'border:0;background:' + (active ? '#17130F' : 'transparent') + ';color:' + (active ? '#EDC71D' : '#4A3B31') +
+      ';padding:11px 20px;border-radius:999px;font-size:15px;cursor:pointer;white-space:nowrap' +
+      (active ? '' : ';border:1px solid #DCC9B8');
+  }
+  componentDidMount() {
+    this.applyType();
+    this._onResize = () => this.setState({vw: window.innerWidth});
+    this._onResize();
+    window.addEventListener('resize', this._onResize);
+    this.slideTimer = setInterval(() => {
+      if (this.state.page === 'home') this.setState(st => ({slide: (st.slide + 1) % SLIDES.length}));
+    }, 6500);
+  }
+  componentWillUnmount() { clearInterval(this.slideTimer); window.removeEventListener('resize', this._onResize); }
+  componentDidUpdate() { this.applyType(); }
+
+  set(k, v) { return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({[k]: v}); window.scrollTo(0, 0); }; }
+  nav(page, extra) { return (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState(Object.assign({page, menu:false, searchOpen:false, nav:null, accountMenu:false}, extra || {})); window.scrollTo(0, 0); }; }
+
+  pill(active) {
+    return 'border:1px solid ' + (active ? '#17130F' : '#C9B7A7') + ';background:' + (active ? '#17130F' : 'transparent') +
+      ';color:' + (active ? '#EDC71D' : '#17130F') + ';padding:11px 14px;font-size:15px;cursor:pointer;border-radius:2px;' +
+      'display:inline-flex;align-items:center;justify-content:center;white-space:nowrap';
+  }
+  pillLg(active) {
+    return 'flex:1;border:1px solid ' + (active ? '#17130F' : '#C9B7A7') + ';background:' + (active ? '#17130F' : 'transparent') +
+      ';color:' + (active ? '#EDC71D' : '#17130F') + ';padding:14px;font-size:16px;cursor:pointer;border-radius:999px;text-align:center';
+  }
+  sideLink(active) {
+    return 'font-size:16px;padding:11px 14px;text-decoration:none;color:' + (active ? '#17130F' : '#4A3B31') +
+      ';background:' + (active ? '#F4E8E0' : 'transparent') + ';border-left:3px solid ' + (active ? '#9C3D10' : 'transparent');
+  }
+  chip(active) {
+    return 'flex:none;border:1px solid ' + (active ? '#EDC71D' : '#4A3B31') + ';background:' + (active ? '#EDC71D' : 'transparent') +
+      ';color:' + (active ? '#17130F' : '#C7B09A') + ';padding:6px 12px;border-radius:999px;font-size:12px;cursor:pointer;white-space:nowrap';
+  }
+
+  buildMega(name) {
+    const item = NAV.find(n => n.name === name) || NAV[0];
+    const sub = (x) => ({name: x.name, open: this.navTo(x)});
+    let cols, tiles = [], blurb, cta;
+    if (item.name === 'Shop All') {
+      cols = [{name: 'Shop All', open: this.navTo(item), hasPills: true, pills: item.featured.map(sub), subs: []}]
+        .concat(NAV.slice(1, 5).map(n => ({name: n.name, open: this.navTo(n), hasPills: null, pills: [], subs: n.subs.map(sub)})));
+      blurb = 'Every item is designed, illustrated and written by First Nations children and adults in the communities we work with.';
+      cta = 'Shop all products';
+    } else if (item.coll) {
+      const c = COLLECTIONS.find(x => x.name === item.coll) || {};
+      cols = [{name: 'All ' + item.name, open: this.navTo(item), subs: item.subs.map(sub)}];
+      tiles = PRODUCTS.filter(p => p.collection === item.coll).slice(0, 2).map(p => ({title: p.title, price: p.price, img: p.img, alt: p.alt, open: this.navTo({page:'product-' + p.id})}));
+      blurb = c.blurb || '';
+      cta = 'Shop ' + item.name;
+    } else {
+      cols = [{name: item.name, open: this.navTo(item), subs: item.subs.map(sub)}];
+      blurb = item.name === 'Wholesale' ? 'Stock First Nations-made books, language resources and merchandise with trade pricing and invoicing.' : 'Children\u2019s Ground Store \u2014 developing First Nations Language resources and creative cultural products.';
+      cta = item.name === 'Wholesale' ? 'Wholesale & B2B' : 'About Children\u2019s Ground Store';
+    }
+    return {cols, tiles, blurb, cta, open: this.navTo(item),
+      hasFeatured: item.name !== 'Shop All' && (item.featured || []).length ? true : null,
+      featured: (item.featured || []).map(sub)};
+  }
+
+  navTo(t) {
+    return (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      const next = {nav:null, accountMenu:false, menu:false};
+      if (t.page && t.page.indexOf('product-') === 0) { next.page = 'product'; next.product = t.page.slice(8); next.qty = 1; next.variant = 0; next.acc = 0; }
+      else if (t.page) next.page = t.page;
+      if (t.coll) { next.page = 'collection'; next.coll = t.coll; next.sub = t.sub || 'All'; }
+      if (t.url) { window.open(t.url, '_blank'); return; }
+      this.setState(next);
+      window.scrollTo(0, 0);
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const page = s.page;
+    const P = (id) => PRODUCTS.find(p => p.id === id);
+    const openP = (id) => this.nav('product', {product:id, qty:1, variant:0, acc:0});
+    const deco = (p) => Object.assign({}, p, {open: openP(p.id)});
+
+    const product = P(s.product) || PRODUCTS[0];
+    const coll = COLLECTIONS.find(c => c.name === s.coll) || COLLECTIONS[0];
+    const collAll = PRODUCTS.filter(p => p.collection === coll.name);
+    const collProducts = (s.sub === 'All' ? collAll : collAll.filter(p => p.sub === s.sub)).map(deco);
+
+    const terms = s.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const searchHits = terms.length === 0 ? PRODUCTS
+      : PRODUCTS.filter(p => terms.every(t => (p.title + ' ' + p.sub + ' ' + p.collection + ' ' + p.desc).toLowerCase().includes(t)));
+    const accData = [
+      {title:'Description', body: product.desc},
+      {title:'About the makers', body:'Designed, illustrated and written by First Nations children and adults in the communities we work with in the Northern Territory. Artist and community credits are printed on every item.'},
+      {title:'Shipping & returns', body:'Packed in Mparntwe within 2–3 business days. Flat-rate AU$9.50 domestic postage, free over AU$150. Thirty-day returns on unused items.'}
+    ];
+
+    return {
+      pg: {home:page==='home', shop:page==='shop', collection:page==='collection', product:page==='product', about:page==='about',
+        donate:page==='donate', contact:page==='contact', policy:page==='policy', cart:page==='cart',
+        checkout:page==='checkout', confirm:page==='confirm', search:page==='search', login:page==='login', account:page==='account',
+        gallery:page==='gallery', wholesale:page==='wholesale'},
+
+      wsSegments: [
+        {title:'Schools & early learning', body:'Classroom sets of bilingual books, flashcards and language kits, developed with Arrernte and Bolmo educators.'},
+        {title:'Galleries, museums & retail', body:'Art cards, prints, totes and calendars with artist and community credits supplied for display.'},
+        {title:'Corporate & gifting', body:'[Copy to be supplied by Children\u2019s Ground \u2014 corporate and gifting orders]'}
+      ],
+      wsSteps: [
+        {n:'1', title:'Register', body:'Tell us about your organisation and what you want to stock.'},
+        {n:'2', title:'Get trade pricing', body:'We send the trade catalogue, price list and order form.'},
+        {n:'3', title:'Order & invoice', body:'Order by invoice with 30-day terms for approved accounts.'},
+        {n:'4', title:'Restock easily', body:'Reorder from your account — minimums apply per line, not per order.'}
+      ],
+      wsProducts: [
+        {id:'birds-book', rrp:'AU$30.00', trade:'AU$18.00', moq:'10 units'},
+        {id:'birds-flash', rrp:'AU$35.00', trade:'AU$21.00', moq:'10 sets'},
+        {id:'lang-kit', rrp:'AU$95.00', trade:'AU$62.00', moq:'5 kits'},
+        {id:'tote', rrp:'AU$25.00', trade:'AU$14.50', moq:'20 units'},
+        {id:'artcards', rrp:'AU$28.00', trade:'AU$16.50', moq:'12 sets'},
+        {id:'cal', rrp:'AU$25.00', trade:'AU$13.00', moq:'25 units'}
+      ].map(w => { const p = PRODUCTS.find(x => x.id === w.id) || {}; return Object.assign({title: p.title, img: p.img, alt: p.alt}, w); }),
+
+      galleryFilters: ['All', 'Mparntwe - Alice Springs', 'Altarpilta - Plenty Hwy', 'Garramilla - Darwin'].map(n => ({
+        name: n, style: this.pill((s.gFilter || 'All') === n), pick: () => this.setState({gFilter: n})})),
+      galleryItems: [
+        {title:'Ayeye Thipe-Akerte \u2014 About Birds', artist:'Young artists, Mparntwe - Alice Springs', region:'Mparntwe - Alice Springs', img: (PRODUCTS.find(p => p.id === 'birds-book') || {}).img, alt:'Artwork from Ayeye Thipe-Akerte \u2014 About Birds', shop: this.nav('product', {product:'birds-book', qty:1, variant:0, acc:0})},
+        {title:'Learning on Country', artist:'Children\u2019s Ground communities, Central Australia', region:'Mparntwe - Alice Springs', img:'https://childrensground.org.au/wp-content/uploads/2022/12/42.jpg', alt:'Children learning on Country'},
+        {title:'Learning bush tucker', artist:'', region:'Mparntwe - Alice Springs', img:'assets/img/community/bush-tucker.jpg', alt:'An Elder and children looking at bush tucker on a branch'},
+        {title:'Ceremony at sunset', artist:'', region:'Altarpilta - Plenty Hwy', img:'assets/img/community/ceremony-sunset.jpg', alt:'Children in ceremony paint and feather headbands at sunset'},
+        {title:'Running on country', artist:'', region:'Altarpilta - Plenty Hwy', img:'assets/img/community/kids-running.jpg', alt:'Children running together on red dirt'},
+        {title:'Family day', artist:'', region:'Garramilla - Darwin', img:'assets/img/community/father-child.jpg', alt:'A father lifting his laughing child'},
+        {title:'Learning circle', artist:'', region:'Mparntwe - Alice Springs', img:'assets/img/community/learning-circle.jpg', alt:'Children sitting together in a learning circle'}
+      ].filter(w => (s.gFilter || 'All') === 'All' || w.region === s.gFilter),
+      promoBanner: '',
+      topBannerOpen: s.topBannerClosed ? null : true,
+      closeTopBanner: () => this.setState({topBannerClosed: true}),
+      closeNav: () => { if (s.nav) this.setState({nav: null}); },
+      megaOpen: s.nav === 'Shop All' && (s.vw || 1440) >= 1400 ? true : null,
+      mega: this.buildMega(s.nav),
+      wideNav: (s.vw || 1440) >= 1400 ? true : null,
+      compactNav: (s.vw || 1440) < 1400 ? true : null,
+      navItems: NAV.map(item => ({
+        name: item.name,
+        open: s.nav === item.name,
+        style: 'color:' + (s.nav === item.name ? '#9C3D10' : '#17130F') + ';text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:5px',
+        toggle: (e) => { e.preventDefault(); this.setState({nav: s.nav === item.name ? null : item.name, menu:false, accountMenu:false}); },
+        openFirst: this.navTo(item),
+        go: this.navTo(item),
+        dropOpen: s.nav === item.name && item.name !== 'Shop All' ? true : null,
+        hover: () => { if (s.nav !== item.name) this.setState({nav: item.name, accountMenu:false}); },
+        hasFeatured: (item.featured || []).length ? true : null,
+        featured: (item.featured || []).map(ft => ({name: ft.name, open: this.navTo(ft)})),
+        subs: item.subs.map(sb => ({name: sb.name, open: this.navTo(sb)}))
+      })),
+      accountMenuOpen: s.accountMenu,
+      toggleAccountMenu: (e) => { e.preventDefault(); this.setState({accountMenu: !s.accountMenu, nav:null, menu:false}); },
+      accountMenu: ACCOUNT_MENU.map(m => ({name: m.name, open: this.navTo(m)})),
+      visitLocations: VISIT_LOCATIONS.map(n => ({name: n})),
+      menuOpen: s.menu,
+      cartCount: s.cart,
+      toggleMenu: (e) => { e.preventDefault(); this.setState({menu: !s.menu}); },
+      goHome: this.nav('home'), goShop: this.nav('shop'), goAbout: this.nav('about'), goDonate: this.nav('donate'),
+      goContact: this.nav('contact'), goWholesale: this.nav('wholesale'), goGallery: this.nav('gallery'), goCart: this.nav('cart'), goCheckout: this.nav('checkout'),
+      goConfirm: this.nav('confirm'), goSearch: this.nav('search'), goLogin: this.nav('login'), goAccount: this.nav('account'),
+      goInvolved: this.nav('donate'), goCollection: this.nav('collection', {coll: product.collection, sub:'All'}),
+      goShipping: this.nav('policy', {policy:'shipping'}), goPrivacy: this.nav('policy', {policy:'privacy'}), goTerms: this.nav('policy', {policy:'terms'}),
+
+      collections: COLLECTIONS.map(c => Object.assign({}, c, {
+        count: PRODUCTS.filter(p => p.collection === c.name).length + ' products',
+        open: this.nav('collection', {coll:c.name, sub:'All'}),
+        subs: c.subs.map(n => ({name:n, open: this.nav('collection', {coll:c.name, sub:n})}))
+      })),
+
+      featured: [P('birds-book'), P('birds-flash'), P('tee'), P('print')].map(deco),
+      allProducts: PRODUCTS.map(deco),
+      allCount: PRODUCTS.length,
+      searchResults: searchHits.map(deco),
+      popupResults: searchHits.slice(0, 4).map(deco),
+      searchCount: searchHits.length,
+      hasResults: searchHits.length > 0,
+      noResults: searchHits.length === 0,
+      q: s.q,
+      setQ: (e) => this.setState({q: e.target.value}),
+      searchOpen: s.searchOpen,
+      toggleSearch: (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({searchOpen: !s.searchOpen, menu:false}); },
+      related: PRODUCTS.filter(p => p.id !== product.id).slice(0, 4).map(deco),
+
+      coll: coll,
+      collProducts: collProducts,
+      collCount: collProducts.length,
+      subFilters: ['All'].concat(coll.subs).map(n => ({name: n, style: this.sideLink(s.sub === n), pick: this.set('sub', n)})),
+
+      product: product,
+      qty: s.qty,
+      inc: () => this.setState({qty: s.qty + 1}),
+      dec: () => this.setState({qty: Math.max(1, s.qty - 1)}),
+      addToCart: () => this.setState({cart: s.cart + s.qty}),
+      addLabel: /sold out/i.test(product.tag || '') ? 'Join the waitlist' : 'Add to cart',
+      thumbs: ['Front', 'Detail', 'In use', 'Artist credit'].map((label, i) => ({
+        label: label, img: PRODUCTS[(PRODUCTS.indexOf(product) + i) % PRODUCTS.length].img })),
+      variants: (product.opts || VARIANT_HINT[product.sub] || ['One size']).map((l, i) => ({label: l, style: this.pill(s.variant === i), pick: this.set('variant', i)})),
+      variantLabel: /^(S|M|L|XL|2XL|3XL)$/.test((product.opts || VARIANT_HINT[product.sub] || [''])[0]) ? 'Size' : 'Option',
+      accordions: accData.map((a, i) => ({title: a.title, body: a.body, open: s.acc === i, icon: s.acc === i ? '–' : '+',
+        toggle: () => this.setState({acc: s.acc === i ? -1 : i})})),
+
+      amounts: [25, 50, 100, 250].map(v => ({label: '$' + v, style: this.pill(s.amount === v), pick: this.set('amount', v)})),
+      amountsLg: [25, 50, 100, 250, 500].map(v => ({label: '$' + v, style: this.pill(s.amount === v), pick: this.set('amount', v)})),
+      onceStyle: this.pill(s.freq === 'once'), monthlyStyle: this.pill(s.freq === 'monthly'),
+      onceStyleLg: this.pillLg(s.freq === 'once'), monthlyStyleLg: this.pillLg(s.freq === 'monthly'),
+      setOnce: this.set('freq', 'once'), setMonthly: this.set('freq', 'monthly'),
+      donateLabel: '$' + s.amount + (s.freq === 'monthly' ? ' a month' : ''),
+      impactLine: s.amount >= 250 ? 'Supports a family\u2019s participation in learning on country for a full term.'
+        : s.amount >= 100 ? 'Helps put language resources into the hands of children in their first language.'
+        : s.amount >= 50 ? 'Contributes to a day of First Nations-led early learning.'
+        : 'Every gift over $2 is tax deductible.',
+      giveWays: [
+        {title:'Fundraise for us', body:'Run an event, a birthday appeal or a workplace drive with your community.'},
+        {title:'Partnership', body:'Long-term partnerships that back community-led change, not short-term projects.'},
+        {title:'Gifts in Wills', body:'Leave a gift that keeps walking with the next generations.'},
+        {title:'Wear it Yellow', body:'Stand with First Nations children and their right to learn in language and culture.'}
+      ],
+
+      stories: [
+        {kind:'Media release', title:'NT school attendance data confirms the need for First Nations designed and led education', excerpt:'The latest attendance figures show what communities have long said — education must be designed, led and delivered by First Nations people.', cta:'Read the release', imgAlt:'Community members at the Children\u2019s Ground store stall in Mparntwe', img:'assets/img/web/stall-community.jpg'},
+        {kind:'Report', title:'Annual Report 2025', excerpt:'Our year in learning, health, employment and community wellbeing, told through the voices of the communities we work with.', cta:'Read the report', imgAlt:'Children\u2019s Ground educators with language books and learning resources', img:'assets/img/web/books-whiteboard.jpg'},
+        {kind:'Campaign', title:'The M.K. Turner Report', excerpt:'Ingkerrekele Arntarnte-areme — Everyone Being Responsible. Through our campaigns, we can start a new chapter where we walk as equals.', cta:'See the campaign', imgAlt:'The Children\u2019s Ground stall at a community gathering', img:'assets/img/web/stall-ceramics-wide.jpg'}
+      ],
+      quotes: [
+        {text:'We want them to know in their mind and in their heart who they are.', who:'Djaykuk Djandjomerr, Bolmo Elder, Children\u2019s Ground'},
+        {text:'We\u2019re seeing lots of big changes for the kids in our community through Children\u2019s Ground… it\u2019s changed their little lives.', who:'Cassandra Neil, Arrernte Early Years Educator'},
+        {text:'The participation of people. The smiles on people\u2019s faces. That gives me hope.', who:'William Tilmouth, Founding Chair of Children\u2019s Ground'}
+      ],
+      offices: [
+        {region:'Mparntwe - Alice Springs', detail:'On the land of the Arrernte People'},
+        {region:'Altarpilta - Plenty Hwy', detail:'Central Australia — on the land of the Arrernte People'},
+        {region:'Garramilla - Darwin', detail:'On the land of the Larrakia people'},
+        {region:'Naarm - Melbourne', detail:'On the land of the Wurundjeri People of the Kulin Nation'}
+      ],
+
+
+      policy: POLICIES[s.policy],
+      policyNav: [['shipping','Shipping & Returns'], ['privacy','Privacy Policy'], ['terms','Terms & Conditions']]
+        .map(([k, n]) => ({name: n, style: this.sideLink(s.policy === k), open: this.nav('policy', {policy:k})})),
+
+      cartItems: [
+        {title:'Ayeye Thipe-Akerte — Arrernte Birds', variant:'Standard · Qty 2', line:'AU$60.00', img:'assets/img/web/books-easels.jpg', alt:'Ayeye Thipe-Akerte on display at the Children\u2019s Ground stall'},
+        {title:'Tote Bag: Ampe-kenhe Art', variant:'Natural canvas · Qty 1', line:'AU$25.00', img:'assets/img/web/clothing-room.jpg', alt:'Printed tote bags hanging at the Children\u2019s Ground store'}
+      ],
+      orders: [
+        {id:'#CG-10482', date:'14 August 2026', items:'3 items', status:'Packing', total:'AU$104.50'},
+        {id:'#CG-10233', date:'2 June 2026', items:'1 item', status:'Delivered', total:'AU$45.00'},
+        {id:'#CG-09871', date:'19 March 2026', items:'5 items', status:'Delivered', total:'AU$188.00'}
+      ],
+      accountNav: ['Orders', 'Addresses', 'Your details', 'Donations', 'Saved resources']
+        .map((n, i) => ({name: n, style: this.sideLink(i === 0)})),
+
+      heroLayers: SLIDES.map((sl, i) => ({alt: sl.alt,
+        style: 'position:absolute;inset:0;background-image:url(' + sl.img + ');background-size:cover;background-position:center 32%;background-color:#17130F;opacity:' + (i === s.slide ? 1 : 0) + ';transition:opacity 1.2s ease;transform:scale(' + (i === s.slide ? 1 : 1.045) + ');transition-property:opacity,transform;transition-duration:1.2s,6.5s'})),
+      slide: Object.assign({}, SLIDES[s.slide % SLIDES.length], {
+        go: SLIDES[s.slide % SLIDES.length].page === 'donate' ? this.nav('donate') : this.nav('shop') }),
+      dots: SLIDES.map((sl, i) => ({label: 'Go to slide ' + (i + 1), go: this.set('slide', i),
+        style: 'width:' + (s.slide === i ? '30px' : '10px') + ';height:10px;border-radius:999px;border:0;cursor:pointer;padding:0;background:' + (s.slide === i ? '#EDC71D' : 'rgba(251,246,241,.45)') })),
+      nextSlide: () => this.setState({slide: (s.slide + 1) % SLIDES.length}),
+      prevSlide: () => this.setState({slide: (s.slide - 1 + SLIDES.length) % SLIDES.length}),
+
+      marquee: MARQUEE_A.slice(0, MARQUEE_A.length - 1).map(t => ({text: t})),
+      marquee2: MARQUEE_B.slice(0, MARQUEE_B.length - 1).map(t => ({text: t})),
+
+      tabs: COLLECTIONS.map(c => ({name: c.name, style: this.tabStyle(s.tab === c.name), pick: this.set('tab', c.name)})),
+      tabName: s.tab,
+      tabViewAll: this.nav('collection', {coll: s.tab, sub: 'All'}),
+      tabProducts: PRODUCTS.filter(p => p.collection === s.tab).slice(0, 4).map(p => Object.assign({}, p, {
+        open: this.nav('product', {product: p.id, qty: 1, variant: 0, acc: 0}),
+        opts: (VARIANT_HINT[p.sub] || ['One size']).map(l => ({label: l})) })),
+
+      places: PLACES,
+      findMarkets: [{name:'Todd Mall Markets, Alice Springs', detail:'Every 2nd Sunday, Feb \u2013 Dec, 9am \u2013 1pm'}],
+      findStockists: [{name:'[Stockist list to be supplied by Children\u2019s Ground]', detail:''}],
+
+      screens: [['home','Home'], ['shop','Shop'], ['collection','Collection'], ['product','Product'], ['about','About'],
+        ['gallery','Gallery'], ['wholesale','Wholesale'], ['donate','Donate'], ['contact','Contact'], ['policy','Policies'], ['cart','Cart'],
+        ['checkout','Checkout'], ['confirm','Confirmation'], ['search','Search'], ['login','Login'], ['account','Account']]
+        .map(([k, n]) => ({name: n, style: this.chip(page === k), open: this.nav(k)}))
+    };
+  }
+}
+</script>
+</body>
+</html>
